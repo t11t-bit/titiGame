@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TitiGame — Jogos de Palavras</title>
+<style>
+:root[data-theme="dark"]{--bg:#0e0e11;--bg2:#16161a;--bg3:#1e1e24;--bg4:#2a2a33;--border:rgba(255,255,255,0.08);--border2:rgba(255,255,255,0.14);--text:#f0f0f4;--text2:#a0a0b0;--text3:#606070;--accent:#7c6ff7;--accent-light:#a99af9;--accent-bg:rgba(124,111,247,0.15);--green:#4caf7d;--green-bg:rgba(76,175,125,0.15);--red:#e05c5c;--red-bg:rgba(224,92,92,0.15);--card-shadow:0 2px 16px rgba(0,0,0,0.4);--amber:#f0a03c;--amber-bg:rgba(240,160,60,0.15);}
+:root[data-theme="light"]{--bg:#f4f4f8;--bg2:#ffffff;--bg3:#eaeaf0;--bg4:#dddde8;--border:rgba(0,0,0,0.08);--border2:rgba(0,0,0,0.14);--text:#111118;--text2:#5a5a70;--text3:#9090a8;--accent:#5b52e8;--accent-light:#7c74f0;--accent-bg:rgba(91,82,232,0.1);--green:#2d8c5c;--green-bg:rgba(45,140,92,0.12);--red:#c93030;--red-bg:rgba(201,48,48,0.1);--card-shadow:0 2px 12px rgba(0,0,0,0.08);--amber:#b86e00;--amber-bg:rgba(184,110,0,0.1);}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;transition:background .25s,color .25s;}
+nav{display:flex;align-items:center;justify-content:space-between;padding:0 2rem;height:56px;border-bottom:1px solid var(--border);background:var(--bg2);position:sticky;top:0;z-index:100;}
+.nav-logo{font-size:18px;font-weight:700;color:var(--text);letter-spacing:-.3px;}
+.nav-logo span{color:var(--accent);}
+.nav-right{display:flex;gap:8px;align-items:center;}
+.nav-btn{height:36px;padding:0 12px;border-radius:10px;border:1px solid var(--border2);background:var(--bg3);color:var(--text2);cursor:pointer;font-size:13px;font-weight:500;display:flex;align-items:center;gap:6px;transition:background .15s;}
+.nav-btn:hover{background:var(--bg4);}
+.screen{display:none;}
+.screen.active{display:block;}
+
+/* MENU */
+.menu-hero{text-align:center;padding:4rem 1rem 2.5rem;}
+.menu-hero h1{font-size:clamp(2rem,5vw,3rem);font-weight:700;letter-spacing:-.5px;margin-bottom:.75rem;}
+.menu-hero h1 span{color:var(--accent-light);}
+.menu-hero p{font-size:16px;color:var(--text2);}
+.game-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;max-width:960px;margin:0 auto;padding:0 1.5rem 4rem;}
+.game-card{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:1.75rem;cursor:pointer;transition:border-color .2s,transform .15s,box-shadow .2s;box-shadow:var(--card-shadow);}
+.game-card:hover{border-color:var(--accent);transform:translateY(-3px);box-shadow:0 8px 24px rgba(124,111,247,.15);}
+.game-card-icon{font-size:40px;margin-bottom:1rem;display:block;}
+.game-card h2{font-size:17px;font-weight:600;margin-bottom:.4rem;}
+.game-card p{font-size:14px;color:var(--text2);line-height:1.6;}
+.game-card .badge{display:inline-block;margin-top:1rem;font-size:12px;padding:3px 10px;border-radius:20px;}
+.badge-purple{background:rgba(124,111,247,.15);color:var(--accent-light);}
+.badge-green{background:rgba(76,175,125,.15);color:var(--green);}
+.badge-amber{background:var(--amber-bg);color:var(--amber);}
+
+/* SETUP SCREEN */
+.setup-screen{max-width:480px;margin:0 auto;padding:2rem 1.5rem 4rem;}
+.setup-title{font-size:22px;font-weight:700;margin-bottom:.4rem;}
+.setup-sub{font-size:14px;color:var(--text2);margin-bottom:2rem;}
+.setup-card{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:1.75rem;margin-bottom:1rem;}
+.setup-label{font-size:13px;color:var(--text2);margin-bottom:.75rem;display:block;}
+.rounds-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;}
+.r-btn{padding:.6rem 0;border-radius:10px;border:1px solid var(--border2);background:var(--bg3);color:var(--text);font-size:14px;font-weight:500;cursor:pointer;transition:all .15s;}
+.r-btn:hover{background:var(--bg4);}
+.r-btn.active{background:var(--accent);border-color:var(--accent);color:#fff;}
+.start-game-btn{width:100%;padding:.9rem;border-radius:12px;border:none;background:var(--accent);color:#fff;font-size:16px;font-weight:600;cursor:pointer;margin-top:.5rem;transition:opacity .15s;}
+.start-game-btn:hover{opacity:.88;}
+.back-btn{display:inline-flex;align-items:center;gap:6px;font-size:14px;color:var(--text2);background:none;border:none;cursor:pointer;padding:6px 0;margin-bottom:1.5rem;transition:color .15s;}
+.back-btn:hover{color:var(--text);}
+
+/* GAME COMMON */
+.game-screen{max-width:600px;margin:0 auto;padding:2rem 1.5rem 4rem;}
+.hud{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem;}
+.hud-item{font-size:13px;color:var(--text2);}
+.hud-val{font-size:22px;font-weight:600;color:var(--text);display:block;}
+.progress-bar-wrap{background:var(--bg3);border-radius:99px;height:4px;margin-bottom:1.5rem;}
+.progress-bar-fill{height:4px;border-radius:99px;background:var(--accent);transition:width .3s;}
+.question-card{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:2rem;text-align:center;margin-bottom:1rem;}
+.emoji-big{font-size:56px;line-height:1.3;letter-spacing:8px;margin-bottom:.75rem;}
+.cat-tag{font-size:11px;text-transform:uppercase;letter-spacing:1.2px;color:var(--text3);margin-bottom:1.5rem;}
+.options{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:1rem;}
+.opt{background:var(--bg3);border:1px solid var(--border2);border-radius:12px;padding:.875rem .75rem;font-size:14px;font-weight:500;color:var(--text);cursor:pointer;transition:background .15s,border-color .15s,transform .1s;line-height:1.3;}
+.opt:hover:not(:disabled){background:var(--bg4);transform:scale(1.02);}
+.opt:disabled{cursor:default;}
+.opt.correct{background:var(--green-bg);border-color:var(--green);color:var(--green);}
+.opt.wrong{background:var(--red-bg);border-color:var(--red);color:var(--red);}
+.feedback-line{text-align:center;font-size:14px;min-height:22px;color:var(--text2);margin-bottom:.75rem;}
+.next-btn{width:100%;padding:.875rem;background:var(--accent);border:none;border-radius:12px;color:#fff;font-size:15px;font-weight:600;cursor:pointer;transition:opacity .15s,transform .1s;display:none;}
+.next-btn:hover{opacity:.88;}
+.next-btn.show{display:block;}
+
+/* IMPOSTOR */
+.impostor-word-display{font-size:20px;font-weight:600;background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:1.5rem 2rem;text-align:center;margin-bottom:1rem;color:var(--text);}
+.words-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:1rem;}
+.word-btn{background:var(--bg3);border:1px solid var(--border2);border-radius:12px;padding:.875rem;font-size:15px;font-weight:500;color:var(--text);cursor:pointer;transition:background .15s,border-color .15s,transform .1s;}
+.word-btn:hover:not(:disabled){background:var(--bg4);transform:scale(1.02);}
+.word-btn:disabled{cursor:default;}
+.word-btn.correct{background:var(--green-bg);border-color:var(--green);color:var(--green);}
+.word-btn.wrong{background:var(--red-bg);border-color:var(--red);color:var(--red);}
+
+/* CADÁVER */
+.cad-last-word{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:2rem;text-align:center;margin-bottom:.75rem;}
+.cad-last-label{font-size:11px;text-transform:uppercase;letter-spacing:1.2px;color:var(--text3);margin-bottom:.75rem;}
+.cad-last-val{font-size:32px;font-weight:700;color:var(--accent-light);}
+.cad-story-reveal{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:1.5rem;font-size:16px;line-height:1.9;color:var(--text);margin-bottom:1rem;max-height:300px;overflow-y:auto;}
+.word-input{width:100%;padding:.875rem 1rem;background:var(--bg3);border:1px solid var(--border2);border-radius:12px;color:var(--text);font-size:16px;outline:none;margin-bottom:.75rem;transition:border-color .15s;}
+.word-input:focus{border-color:var(--accent);}
+.word-input::placeholder{color:var(--text3);}
+.add-word-btn{width:100%;padding:.875rem;border-radius:12px;border:none;background:var(--accent);color:#fff;font-size:15px;font-weight:600;cursor:pointer;margin-bottom:.5rem;transition:opacity .15s;}
+.add-word-btn:hover{opacity:.88;}
+.cad-info{font-size:13px;color:var(--text3);text-align:center;}
+
+/* ANAGRAMA */
+.anagram-word{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-bottom:1.25rem;}
+.letter-tile{width:44px;height:52px;background:var(--bg3);border:1px solid var(--border2);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:700;color:var(--text);cursor:pointer;transition:background .15s,transform .1s;user-select:none;}
+.letter-tile:hover{background:var(--bg4);transform:scale(1.05);}
+.letter-tile.selected{background:var(--accent-bg);border-color:var(--accent);color:var(--accent-light);}
+.letter-tile.disabled{opacity:.3;cursor:default;}
+.answer-slots{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-bottom:1.5rem;min-height:60px;}
+.answer-slot{width:44px;height:52px;border-bottom:2px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:700;color:var(--text);}
+.answer-slot.filled{border-color:var(--accent);}
+.anagram-hint{font-size:13px;color:var(--text3);text-align:center;margin-bottom:1rem;}
+.anagram-actions{display:flex;gap:10px;margin-bottom:.75rem;}
+.anagram-actions button{flex:1;padding:.75rem;border-radius:12px;border:1px solid var(--border2);background:var(--bg3);color:var(--text);font-size:14px;cursor:pointer;transition:background .15s;}
+.anagram-actions button:hover{background:var(--bg4);}
+
+/* HISTÓRICO */
+.history-screen{max-width:700px;margin:0 auto;padding:2rem 1.5rem 4rem;}
+.history-empty{text-align:center;padding:4rem 1rem;color:var(--text3);font-size:16px;}
+.history-item{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:1.25rem 1.5rem;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;gap:1rem;}
+.history-left{display:flex;align-items:center;gap:12px;}
+.history-icon{font-size:28px;}
+.history-name{font-size:15px;font-weight:600;color:var(--text);}
+.history-date{font-size:12px;color:var(--text3);}
+.history-right{text-align:right;}
+.history-score{font-size:20px;font-weight:700;color:var(--accent-light);}
+.history-detail{font-size:12px;color:var(--text3);}
+.history-clear{display:block;margin:1.5rem auto 0;padding:.7rem 1.5rem;border-radius:10px;border:1px solid var(--red-bg);background:none;color:var(--red);font-size:14px;cursor:pointer;transition:background .15s;}
+.history-clear:hover{background:var(--red-bg);}
+
+/* FINAL */
+.final-box{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:2.5rem;text-align:center;box-shadow:var(--card-shadow);}
+.final-box .big-emoji{font-size:56px;margin-bottom:.75rem;}
+.final-box h2{font-size:22px;font-weight:700;margin-bottom:.4rem;}
+.final-box p{color:var(--text2);font-size:15px;margin-bottom:1.75rem;}
+.final-actions{display:flex;gap:10px;flex-direction:column;}
+.btn-outline{padding:.875rem;border-radius:12px;border:1px solid var(--border2);background:none;color:var(--text);font-size:15px;font-weight:500;cursor:pointer;transition:background .15s;}
+.btn-outline:hover{background:var(--bg3);}
+.btn-filled{padding:.875rem;border-radius:12px;border:none;background:var(--accent);color:#fff;font-size:15px;font-weight:600;cursor:pointer;transition:opacity .15s;}
+.btn-filled:hover{opacity:.88;}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">titi<span>game</span></div>
+  <div class="nav-right">
+    <button class="nav-btn" onclick="showScreen('historico')">📋 histórico</button>
+    <button class="nav-btn" id="themeBtn" onclick="toggleTheme()">☀️ claro</button>
+  </div>
+</nav>
+
+<!-- ══ MENU ══ -->
+<div class="screen active" id="screen-menu">
+  <div class="menu-hero">
+    <h1>Escolha seu <span>jogo</span></h1>
+    <p>3 modos de jogo — sozinho ou com amigos</p>
+  </div>
+  <div class="game-grid">
+    <div class="game-card" onclick="goSetup('emoji')">
+      <span class="game-card-icon">🎯</span>
+      <h2>Adivinhe pelo emoji</h2>
+      <p>Descubra a palavra ou frase escondida a partir de uma sequência de emojis. Quanto mais você acerta, mais pontos ganha.</p>
+      <span class="badge badge-purple">solo · até 50 rodadas</span>
+    </div>
+    <div class="game-card" onclick="goSetup('impostor')">
+      <span class="game-card-icon">🕵️</span>
+      <h2>Caça ao impostor</h2>
+      <p>Quatro palavras aparecem na tela. Três pertencem ao mesmo grupo secreto — uma é o impostor. Descubra qual não pertence.</p>
+      <span class="badge badge-green">solo · até 50 rodadas</span>
+    </div>
+    <div class="game-card" onclick="goSetup('cadaver')">
+      <span class="game-card-icon">✍️</span>
+      <h2>Cadáver esquisito</h2>
+      <p>Construa uma história absurda palavra por palavra. Cada jogador só vê a última palavra digitada — o resultado é sempre imprevisível.</p>
+      <span class="badge badge-amber">multiplayer · até 50 turnos</span>
+    </div>
+    <div class="game-card" onclick="goSetup('anagrama')">
+      <span class="game-card-icon">🔤</span>
+      <h2>Anagrama</h2>
+      <p>As letras de uma palavra estão embaralhadas. Reorganize-as na ordem certa antes de ficar sem tentativas. Use a dica se precisar!</p>
+      <span class="badge badge-purple">solo · até 50 rodadas</span>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SETUP ══ -->
+<div class="screen" id="screen-setup">
+  <div class="setup-screen">
+    <button class="back-btn" onclick="goMenu()">← voltar ao menu</button>
+    <div class="setup-title" id="setup-title"></div>
+    <div class="setup-sub" id="setup-sub"></div>
+    <div class="setup-card">
+      <span class="setup-label">quantas rodadas?</span>
+      <div class="rounds-grid" id="rounds-grid"></div>
+    </div>
+    <button class="start-game-btn" onclick="launchGame()">jogar →</button>
+  </div>
+</div>
+
+<!-- ══ EMOJI GAME ══ -->
+<div class="screen" id="screen-emoji">
+  <div class="game-screen">
+    <button class="back-btn" onclick="goMenu()">← voltar ao menu</button>
+    <div class="progress-bar-wrap"><div class="progress-bar-fill" id="e-bar" style="width:0%"></div></div>
+    <div class="hud">
+      <div class="hud-item">pontos <span class="hud-val" id="e-score">0</span></div>
+      <div class="hud-item" style="text-align:right">rodada <span class="hud-val" id="e-round">1/10</span></div>
+    </div>
+    <div class="question-card">
+      <div class="emoji-big" id="e-emojis"></div>
+      <div class="cat-tag" id="e-cat"></div>
+      <div class="options" id="e-opts"></div>
+    </div>
+    <div class="feedback-line" id="e-fb"></div>
+    <button class="next-btn" id="e-next" onclick="emojiNext()">próxima →</button>
+  </div>
+</div>
+
+<!-- ══ IMPOSTOR ══ -->
+<div class="screen" id="screen-impostor">
+  <div class="game-screen">
+    <button class="back-btn" onclick="goMenu()">← voltar ao menu</button>
+    <div class="progress-bar-wrap"><div class="progress-bar-fill" id="i-bar" style="width:0%"></div></div>
+    <div class="hud">
+      <div class="hud-item">pontos <span class="hud-val" id="i-score">0</span></div>
+      <div class="hud-item" style="text-align:right">rodada <span class="hud-val" id="i-round">1/10</span></div>
+    </div>
+    <div class="impostor-word-display" id="i-group-name"></div>
+    <div class="words-grid" id="i-words"></div>
+    <div class="feedback-line" id="i-fb"></div>
+    <button class="next-btn" id="i-next" onclick="impostorNext()">próxima →</button>
+  </div>
+</div>
+
+<!-- ══ CADÁVER ══ -->
+<div class="screen" id="screen-cadaver">
+  <div class="game-screen">
+    <button class="back-btn" onclick="goMenu()">← voltar ao menu</button>
+    <div class="hud">
+      <div class="hud-item">turnos <span class="hud-val" id="c-turn">0/15</span></div>
+      <div class="hud-item" style="text-align:right">jogador <span class="hud-val" id="c-player">1</span></div>
+    </div>
+    <div class="cad-last-word" id="c-last-box">
+      <div class="cad-last-label">última palavra</div>
+      <div class="cad-last-val" id="c-last-word">—</div>
+    </div>
+    <input class="word-input" id="c-input" placeholder="Digite uma palavra..." maxlength="30" onkeydown="if(event.key==='Enter')addWord()">
+    <button class="add-word-btn" id="c-add-btn" onclick="addWord()">adicionar palavra</button>
+    <div class="cad-info" id="c-info"></div>
+  </div>
+</div>
+
+<!-- ══ ANAGRAMA ══ -->
+<div class="screen" id="screen-anagrama">
+  <div class="game-screen">
+    <button class="back-btn" onclick="goMenu()">← voltar ao menu</button>
+    <div class="progress-bar-wrap"><div class="progress-bar-fill" id="an-bar" style="width:0%"></div></div>
+    <div class="hud">
+      <div class="hud-item">pontos <span class="hud-val" id="an-score">0</span></div>
+      <div class="hud-item" style="text-align:right">rodada <span class="hud-val" id="an-round">1/10</span></div>
+    </div>
+    <div class="question-card" style="padding:1.5rem">
+      <div class="cat-tag" id="an-cat"></div>
+      <div class="answer-slots" id="an-slots"></div>
+      <div class="anagram-word" id="an-tiles"></div>
+      <div class="anagram-hint" id="an-hint"></div>
+      <div class="anagram-actions">
+        <button onclick="anagramHint()">💡 dica</button>
+        <button onclick="anagramClear()">↺ limpar</button>
+      </div>
+    </div>
+    <div class="feedback-line" id="an-fb"></div>
+    <button class="next-btn" id="an-next" onclick="anagramNext()">próxima →</button>
+  </div>
+</div>
+
+<!-- ══ HISTÓRICO ══ -->
+<div class="screen" id="screen-historico">
+  <div class="history-screen">
+    <button class="back-btn" onclick="goMenu()">← voltar ao menu</button>
+    <div class="hud" style="margin-bottom:1.5rem">
+      <div>
+        <div style="font-size:22px;font-weight:700">Histórico</div>
+        <div style="font-size:14px;color:var(--text2)">suas últimas partidas</div>
+      </div>
+    </div>
+    <div id="history-list"></div>
+  </div>
+</div>
+
+<!-- ══ FINAL ══ -->
+<div class="screen" id="screen-final">
+  <div class="game-screen">
+    <div class="final-box">
+      <div class="big-emoji" id="f-emoji"></div>
+      <h2 id="f-title"></h2>
+      <p id="f-sub"></p>
+      <div class="final-actions">
+        <button class="btn-filled" id="f-play-again">jogar de novo</button>
+        <button class="btn-outline" onclick="goMenu()">escolher outro jogo</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── THEME ──
+function toggleTheme(){
+  const isDark=document.documentElement.dataset.theme==='dark';
+  document.documentElement.dataset.theme=isDark?'light':'dark';
+  document.getElementById('themeBtn').textContent=isDark?'🌙 escuro':'☀️ claro';
+}
+
+// ── SCREENS ──
+function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById('screen-'+id).classList.add('active');}
+function goMenu(){showScreen('menu');}
+
+// ── HISTORY ──
+let gameHistory=JSON.parse(localStorage.getItem('titigame_history')||'[]');
+const gameNames={emoji:'Emoji',impostor:'Impostor',cadaver:'Cadáver',anagrama:'Anagrama'};
+const gameIcons={emoji:'🎯',impostor:'🕵️',cadaver:'✍️',anagrama:'🔤'};
+function saveHistory(game,score,detail){
+  const entry={game,score,detail,date:new Date().toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'})};
+  gameHistory.unshift(entry);
+  if(gameHistory.length>50)gameHistory.pop();
+  localStorage.setItem('titigame_history',JSON.stringify(gameHistory));
+}
+function renderHistory(){
+  const el=document.getElementById('history-list');
+  if(!gameHistory.length){el.innerHTML='<div class="history-empty">Nenhuma partida ainda.<br>Jogue um modo para ver o histórico aqui!</div>';return;}
+  el.innerHTML=gameHistory.map(h=>`
+    <div class="history-item">
+      <div class="history-left">
+        <div class="history-icon">${gameIcons[h.game]||'🎮'}</div>
+        <div><div class="history-name">${gameNames[h.game]||h.game}</div><div class="history-date">${h.date}</div></div>
+      </div>
+      <div class="history-right">
+        <div class="history-score">${h.score} pts</div>
+        <div class="history-detail">${h.detail}</div>
+      </div>
+    </div>`).join('');
+  if(gameHistory.length)el.innerHTML+=`<button class="history-clear" onclick="clearHistory()">limpar histórico</button>`;
+}
+function clearHistory(){gameHistory=[];localStorage.removeItem('titigame_history');renderHistory();}
+document.getElementById('screen-historico').addEventListener('transitionend',renderHistory);
+const origShowScreen=showScreen;
+window.showScreen=function(id){origShowScreen(id);if(id==='historico')renderHistory();};
+
+// ── SETUP ──
+let pendingGame='', selectedRounds=10;
+const setupInfo={
+  emoji:{title:'Adivinhe pelo emoji',sub:'Descubra a palavra pelos emojis. Escolha quantas rodadas quer jogar.'},
+  impostor:{title:'Caça ao impostor',sub:'Encontre a palavra que não pertence ao grupo. Escolha quantas rodadas.'},
+  cadaver:{title:'Cadáver esquisito',sub:'Construa a história palavra por palavra. Escolha quantos turnos terá a história.'},
+  anagrama:{title:'Anagrama',sub:'Reorganize as letras para formar a palavra correta. Escolha quantas rodadas.'},
+};
+const roundOptions=[5,10,15,20,25,30,40,50];
+
+function goSetup(game){
+  pendingGame=game; selectedRounds=10;
+  document.getElementById('setup-title').textContent=setupInfo[game].title;
+  document.getElementById('setup-sub').textContent=setupInfo[game].sub;
+  const grid=document.getElementById('rounds-grid');
+  grid.innerHTML=roundOptions.map(n=>`<button class="r-btn${n===10?' active':''}" onclick="selectRounds(${n},this)">${n}</button>`).join('');
+  showScreen('setup');
+}
+function selectRounds(n,btn){
+  selectedRounds=n;
+  document.querySelectorAll('.r-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+}
+function launchGame(){startGame(pendingGame,selectedRounds);}
+
+let currentGame='';
+function startGame(game,rounds){
+  currentGame=game;
+  if(game==='emoji')initEmoji(rounds);
+  else if(game==='impostor')initImpostor(rounds);
+  else if(game==='cadaver')initCadaver(rounds);
+  else if(game==='anagrama')initAnagrama(rounds);
+  showScreen(game);
+}
+
+// ══ EMOJI GAME ══
+const emojiAll=[
+  {emojis:"🦁👑🌍",answer:"Rei Leão",options:["Rei Leão","Simba","Savana","Leão Selvagem"],category:"filmes"},
+  {emojis:"🕷️🕸️👦",answer:"Homem-Aranha",options:["Homem-Aranha","Batman","Super-Homem","Tarântula"],category:"super-heróis"},
+  {emojis:"🍕🇮🇹❤️",answer:"Itália",options:["Itália","Pizza","Roma","Nápoles"],category:"países"},
+  {emojis:"⏰🐊🏴‍☠️",answer:"Peter Pan",options:["Peter Pan","Piratas","Wendy","Neverland"],category:"personagens"},
+  {emojis:"🌹📚👸🐻",answer:"A Bela e a Fera",options:["A Bela e a Fera","Branca de Neve","Cinderela","Rapunzel"],category:"contos"},
+  {emojis:"🎩🐇✨",answer:"Mágica",options:["Mágica","Circo","Ilusão","Chapéu"],category:"palavras"},
+  {emojis:"🐘🇧🇷🎉",answer:"Carnaval",options:["Carnaval","Festa","Brasil","Samba"],category:"cultura"},
+  {emojis:"🌊🐠🐙",answer:"Fundo do Mar",options:["Fundo do Mar","Praia","Aquário","Coral"],category:"lugares"},
+  {emojis:"☕📖🌧️",answer:"Tarde preguiçosa",options:["Tarde preguiçosa","Inverno","Biblioteca","Café da manhã"],category:"momentos"},
+  {emojis:"🚀🌕👨‍🚀",answer:"Apollo 11",options:["Apollo 11","Nasa","Galáxia","Saturno"],category:"história"},
+  {emojis:"🎸🤘🔥",answer:"Rock and Roll",options:["Rock and Roll","Show","Metal","Banda"],category:"música"},
+  {emojis:"🐍🧙‍♂️⚡",answer:"Harry Potter",options:["Harry Potter","Gandalf","Voldemort","Dumbledore"],category:"filmes"},
+  {emojis:"🍌🐒🌴",answer:"Selva",options:["Selva","Zoológico","Macaco","Floresta"],category:"lugares"},
+  {emojis:"❄️👸✨",answer:"Frozen",options:["Frozen","Cinderela","Neve","Elsa"],category:"filmes"},
+  {emojis:"🎃👻🕯️",answer:"Halloween",options:["Halloween","Terror","Festa","Bruxas"],category:"datas"},
+  {emojis:"💍💒👰",answer:"Casamento",options:["Casamento","Noivado","Festa","Aliança"],category:"eventos"},
+  {emojis:"🌋🔥💨",answer:"Vulcão",options:["Vulcão","Montanha","Explosão","Lava"],category:"natureza"},
+  {emojis:"🧠💡🔬",answer:"Ciência",options:["Ciência","Invenção","Laboratório","Gênio"],category:"conhecimento"},
+  {emojis:"🦸‍♀️🌟💪",answer:"Super-Heroína",options:["Super-Heroína","Maga","Princesa","Guerreira"],category:"personagens"},
+  {emojis:"🎭😂😭",answer:"Teatro",options:["Teatro","Cinema","Emoção","Arte"],category:"cultura"},
+  {emojis:"🌞🏖️🍦",answer:"Verão",options:["Verão","Férias","Praia","Calor"],category:"estações"},
+  {emojis:"🧩🤔💭",answer:"Quebra-cabeça",options:["Quebra-cabeça","Enigma","Raciocínio","Jogo"],category:"jogos"},
+  {emojis:"🎤🎶🌟",answer:"Show de música",options:["Show de música","Karaokê","Rádio","Concerto"],category:"eventos"},
+  {emojis:"🐉🔥🏰",answer:"Dragão",options:["Dragão","Castelo","Fogo","Monstro"],category:"fantasia"},
+  {emojis:"👨‍🍳🔪🍳",answer:"Cozinheiro",options:["Cozinheiro","Chef","Restaurante","Cozinha"],category:"profissões"},
+  {emojis:"📱💬❤️",answer:"Mensagem de amor",options:["Mensagem de amor","Aplicativo","Conversa","Redes sociais"],category:"momentos"},
+  {emojis:"🚂🌲🏔️",answer:"Viagem de trem",options:["Viagem de trem","Locomotiva","Estrada de ferro","Aventura"],category:"transporte"},
+  {emojis:"🎓📜👩‍🏫",answer:"Formatura",options:["Formatura","Escola","Diploma","Professora"],category:"eventos"},
+  {emojis:"🕰️🔍🕵️",answer:"Detetive",options:["Detetive","Mistério","Investigação","Policial"],category:"personagens"},
+  {emojis:"🌈☔🌦️",answer:"Arco-íris",options:["Arco-íris","Chuva","Tempestade","Nuvem"],category:"natureza"},
+  {emojis:"🐝🌸🍯",answer:"Mel",options:["Mel","Abelha","Flor","Primavera"],category:"natureza"},
+  {emojis:"🧲⚡🔋",answer:"Eletricidade",options:["Eletricidade","Energia","Imã","Bateria"],category:"ciência"},
+  {emojis:"🎪🤹🎡",answer:"Parque de diversões",options:["Parque de diversões","Circo","Festa","Carnaval"],category:"lugares"},
+  {emojis:"📸🌅✈️",answer:"Lua de mel",options:["Lua de mel","Viagem","Fotografia","Casamento"],category:"viagem"},
+  {emojis:"🦊🌲❄️",answer:"Zootopia",options:["Zootopia","A Raposa","Bambi","O Rei Leão"],category:"filmes"},
+  {emojis:"🏋️💪🥊",answer:"Academia",options:["Academia","Boxe","Musculação","Esporte"],category:"fitness"},
+  {emojis:"🌙⭐🔭",answer:"Astronomia",options:["Astronomia","Noite","Estrela","Telescópio"],category:"ciência"},
+  {emojis:"🎲🃏🏆",answer:"Jogo de tabuleiro",options:["Jogo de tabuleiro","Cartas","Cassino","Xadrez"],category:"jogos"},
+  {emojis:"🍜🥢🌶️",answer:"Ramen",options:["Ramen","Sushi","Comida japonesa","Macarrão"],category:"comida"},
+  {emojis:"🦋🌺🌿",answer:"Jardim",options:["Jardim","Borboleta","Flor","Natureza"],category:"lugares"},
+  {emojis:"📚🕯️🦉",answer:"Biblioteca",options:["Biblioteca","Estudo","Coruja","Conhecimento"],category:"lugares"},
+  {emojis:"🎠🌈🍭",answer:"Fantasia",options:["Fantasia","Circo","Sonho","Parque"],category:"conceitos"},
+  {emojis:"⚽🏟️📺",answer:"Copa do Mundo",options:["Copa do Mundo","Campeonato","Futebol","Estádio"],category:"esportes"},
+  {emojis:"🌵🤠🐎",answer:"Faroeste",options:["Faroeste","Deserto","Cowboys","Velho Oeste"],category:"filmes"},
+  {emojis:"🦈🌊🏄",answer:"Tubarão",options:["Tubarão","Surfista","Oceano","Onda"],category:"natureza"},
+  {emojis:"🎸🎵🌟",answer:"Estrela do rock",options:["Estrela do rock","Músico","Cantor","Bandas"],category:"música"},
+  {emojis:"🏔️🧗🎒",answer:"Escalada",options:["Escalada","Montanhismo","Trilha","Aventura"],category:"esportes"},
+  {emojis:"🌺🏝️🌊",answer:"Hawaii",options:["Hawaii","Polinésia","Ilha","Paraíso"],category:"lugares"},
+  {emojis:"🎬🍿🌟",answer:"Cinema",options:["Cinema","Filme","Pipoca","Hollywood"],category:"entretenimento"},
+  {emojis:"🦚🎨🖌️",answer:"Arte",options:["Arte","Pavão","Pintura","Museu"],category:"cultura"},
+];
+
+let eIdx=0,eScore=0,eCorrect=0,eShuffled=[],eTotal=10;
+function initEmoji(rounds){
+  eIdx=0;eScore=0;eCorrect=0;eTotal=Math.min(rounds,emojiAll.length);
+  eShuffled=[...emojiAll].sort(()=>Math.random()-.5).slice(0,eTotal);
+  renderEmoji();
+}
+function renderEmoji(){
+  if(eIdx>=eShuffled.length){showFinal();return;}
+  const r=eShuffled[eIdx];
+  const opts=[...r.options].sort(()=>Math.random()-.5);
+  document.getElementById('e-bar').style.width=(eIdx/eShuffled.length*100)+'%';
+  document.getElementById('e-round').textContent=(eIdx+1)+'/'+eShuffled.length;
+  document.getElementById('e-score').textContent=eScore;
+  document.getElementById('e-emojis').textContent=r.emojis;
+  document.getElementById('e-cat').textContent=r.category;
+  document.getElementById('e-fb').textContent='';
+  document.getElementById('e-next').classList.remove('show');
+  document.getElementById('e-opts').innerHTML=opts.map(o=>`<button class="opt" onclick="chooseEmoji(this,'${o.replace(/'/g,"\\'")}','${r.answer.replace(/'/g,"\\'")}')">${o}</button>`).join('');
+}
+function chooseEmoji(btn,chosen,answer){
+  document.querySelectorAll('#e-opts .opt').forEach(b=>b.disabled=true);
+  const fb=document.getElementById('e-fb');
+  if(chosen===answer){btn.classList.add('correct');eScore+=10;eCorrect++;fb.textContent='✓ Acertou!';fb.style.color='var(--green)';}
+  else{btn.classList.add('wrong');document.querySelectorAll('#e-opts .opt').forEach(b=>{if(b.textContent===answer)b.classList.add('correct');});fb.textContent=`✗ Era "${answer}"`;fb.style.color='var(--red)';}
+  document.getElementById('e-score').textContent=eScore;
+  document.getElementById('e-next').classList.add('show');
+}
+function emojiNext(){eIdx++;renderEmoji();}
+
+// ══ IMPOSTOR ══
+const impostorAll=[
+  {group:"frutas",words:["Manga","Abacaxi","Goiaba","Cenoura"],impostor:"Cenoura"},
+  {group:"planetas",words:["Marte","Vênus","Plutão","Lua"],impostor:"Lua"},
+  {group:"instrumentos de corda",words:["Violão","Violino","Harpa","Trompete"],impostor:"Trompete"},
+  {group:"capitais do Brasil",words:["Belo Horizonte","Curitiba","Salvador","São Paulo"],impostor:"São Paulo"},
+  {group:"escritores brasileiros",words:["Machado de Assis","Clarice Lispector","Pablo Neruda","Carlos Drummond"],impostor:"Pablo Neruda"},
+  {group:"elementos químicos",words:["Ouro","Prata","Ferro","Bronze"],impostor:"Bronze"},
+  {group:"esportes olímpicos",words:["Judô","Xadrez","Natação","Atletismo"],impostor:"Xadrez"},
+  {group:"tipos de triângulo",words:["Equilátero","Isósceles","Escaleno","Trapézio"],impostor:"Trapézio"},
+  {group:"doenças virais",words:["Gripe","Dengue","Malária","Covid-19"],impostor:"Malária"},
+  {group:"oceanos",words:["Atlântico","Pacífico","Índico","Mediterrâneo"],impostor:"Mediterrâneo"},
+  {group:"cores primárias",words:["Azul","Vermelho","Amarelo","Verde"],impostor:"Verde"},
+  {group:"mamíferos",words:["Baleia","Golfinho","Tubarão","Foca"],impostor:"Tubarão"},
+  {group:"vogais",words:["A","E","I","B"],impostor:"B"},
+  {group:"moedas",words:["Real","Euro","Dólar","Libra"],impostor:"Libra"},
+  {group:"países da América do Sul",words:["Chile","Argentina","Bolívia","México"],impostor:"México"},
+  {group:"linguagens de programação",words:["Python","Java","JavaScript","HTML"],impostor:"HTML"},
+  {group:"instrumentos de sopro",words:["Flauta","Clarinete","Saxofone","Violino"],impostor:"Violino"},
+  {group:"planetas rochosos",words:["Mercúrio","Vênus","Terra","Júpiter"],impostor:"Júpiter"},
+  {group:"tipos de nuvem",words:["Cirro","Cúmulo","Estrato","Tornado"],impostor:"Tornado"},
+  {group:"vitaminas",words:["Vitamina A","Vitamina C","Vitamina D","Cálcio"],impostor:"Cálcio"},
+  {group:"filmes da Marvel",words:["Vingadores","Homem de Ferro","Thor","Batman"],impostor:"Batman"},
+  {group:"capitais europeias",words:["Paris","Roma","Berlim","Istambul"],impostor:"Istambul"},
+  {group:"tipos de pasta",words:["Espaguete","Penne","Fusilli","Risoto"],impostor:"Risoto"},
+  {group:"esportes com bola",words:["Futebol","Basquete","Vôlei","Natação"],impostor:"Natação"},
+  {group:"árvores frutíferas",words:["Laranjeira","Mangueira","Mamoeiro","Carvalho"],impostor:"Carvalho"},
+  {group:"metais nobres",words:["Ouro","Prata","Platina","Alumínio"],impostor:"Alumínio"},
+  {group:"filósofos gregos",words:["Sócrates","Platão","Aristóteles","Descartes"],impostor:"Descartes"},
+  {group:"tipos de dança",words:["Samba","Tango","Salsa","Ginástica"],impostor:"Ginástica"},
+  {group:"bichos do mar",words:["Polvo","Estrela do Mar","Caranguejo","Crocodilo"],impostor:"Crocodilo"},
+  {group:"partes do olho",words:["Íris","Pupila","Córnea","Retina"],impostor:"Retina"},
+  {group:"continentes",words:["América","Europa","Ásia","Caribe"],impostor:"Caribe"},
+  {group:"tipos de queijo",words:["Mussarela","Gouda","Brie","Manteiga"],impostor:"Manteiga"},
+  {group:"presidentes do Brasil",words:["Lula","Bolsonaro","FHC","Mandela"],impostor:"Mandela"},
+  {group:"instrumentos de percussão",words:["Tambor","Bumbo","Caixa","Guitarra"],impostor:"Guitarra"},
+  {group:"ossos do corpo humano",words:["Fêmur","Tíbia","Costela","Tendão"],impostor:"Tendão"},
+  {group:"ferramentas",words:["Martelo","Chave de Fenda","Alicate","Bisturi"],impostor:"Bisturi"},
+  {group:"países da Ásia",words:["China","Japão","Coreia","Egipto"],impostor:"Egipto"},
+  {group:"bebidas quentes",words:["Café","Chá","Chocolate quente","Suco"],impostor:"Suco"},
+  {group:"tipos de triângulo",words:["Acutângulo","Obtusângulo","Retângulo","Hexágono"],impostor:"Hexágono"},
+  {group:"figuras geométricas 3D",words:["Cubo","Esfera","Pirâmide","Círculo"],impostor:"Círculo"},
+  {group:"flores",words:["Rosa","Tulipa","Girassol","Orquídea"],impostor:"Orquídea"},
+  {group:"tipos de voz",words:["Soprano","Contralto","Tenor","Baixo"],impostor:"Baixo"},
+  {group:"partes de uma célula",words:["Núcleo","Mitocôndria","Membrana","Neurônio"],impostor:"Neurônio"},
+  {group:"meses do inverno (Sul)",words:["Junho","Julho","Agosto","Setembro"],impostor:"Setembro"},
+  {group:"super-heróis da DC",words:["Superman","Batman","Wonder Woman","Thor"],impostor:"Thor"},
+  {group:"tipos de energia",words:["Solar","Eólica","Hidrelétrica","Fóssil"],impostor:"Fóssil"},
+  {group:"peças do xadrez",words:["Rei","Rainha","Torre","Dama"],impostor:"Dama"},
+  {group:"elementos da tabela periódica",words:["Hidrogênio","Oxigênio","Carbono","Sal"],impostor:"Sal"},
+  {group:"paises da América Central",words:["Guatemala","Honduras","Costa Rica","Venezuela"],impostor:"Venezuela"},
+  {group:"tipos de macarrão",words:["Lasanha","Tagliatelle","Ravioli","Polenta"],impostor:"Polenta"},
+];
+
+let iIdx=0,iScore=0,iCorrect=0,iShuffled=[],iTotal=10;
+function initImpostor(rounds){
+  iIdx=0;iScore=0;iCorrect=0;iTotal=Math.min(rounds,impostorAll.length);
+  iShuffled=[...impostorAll].sort(()=>Math.random()-.5).slice(0,iTotal);
+  renderImpostor();
+}
+function renderImpostor(){
+  if(iIdx>=iShuffled.length){showFinal();return;}
+  const r=iShuffled[iIdx];
+  const words=[...r.words].sort(()=>Math.random()-.5);
+  document.getElementById('i-bar').style.width=(iIdx/iShuffled.length*100)+'%';
+  document.getElementById('i-round').textContent=(iIdx+1)+'/'+iShuffled.length;
+  document.getElementById('i-score').textContent=iScore;
+  document.getElementById('i-group-name').textContent='Grupo: '+r.group;
+  document.getElementById('i-fb').textContent='';
+  document.getElementById('i-next').classList.remove('show');
+  document.getElementById('i-words').innerHTML=words.map(w=>`<button class="word-btn" onclick="chooseImpostor(this,'${w.replace(/'/g,"\\'")}','${r.impostor.replace(/'/g,"\\'")}')">${w}</button>`).join('');
+}
+function chooseImpostor(btn,chosen,impostor){
+  document.querySelectorAll('#i-words .word-btn').forEach(b=>b.disabled=true);
+  const fb=document.getElementById('i-fb');
+  if(chosen===impostor){btn.classList.add('correct');iScore+=10;iCorrect++;fb.textContent='✓ Encontrou o impostor!';fb.style.color='var(--green)';}
+  else{btn.classList.add('wrong');document.querySelectorAll('#i-words .word-btn').forEach(b=>{if(b.textContent===impostor)b.classList.add('correct');});fb.textContent=`✗ O impostor era "${impostor}"`;fb.style.color='var(--red)';}
+  document.getElementById('i-score').textContent=iScore;
+  document.getElementById('i-next').classList.add('show');
+}
+function impostorNext(){iIdx++;renderImpostor();}
+
+// ══ CADÁVER ══
+let cWords=[],cTurn=0,cMaxTurns=15,cPlayer=1;
+const cStarters=["Era uma vez","De repente","Ontem à noite","Num lugar distante","Quando o sol nasceu","No meio do nada","Certa vez","No ano 3000"];
+function initCadaver(rounds){
+  cWords=[];cTurn=0;cPlayer=1;cMaxTurns=rounds;
+  const s=cStarters[Math.floor(Math.random()*cStarters.length)];
+  const parts=s.split(' ');
+  cWords.push(...parts);
+  renderCadaver();
+}
+function renderCadaver(){
+  document.getElementById('c-turn').textContent=cTurn+'/'+cMaxTurns;
+  document.getElementById('c-player').textContent=cPlayer;
+  const lastWord=cWords[cWords.length-1]||'—';
+  document.getElementById('c-last-word').textContent=lastWord;
+  document.getElementById('c-info').textContent=cTurn<cMaxTurns?`Faltam ${cMaxTurns-cTurn} turnos`:'';
+  document.getElementById('c-input').value='';
+
+  if(cTurn>=cMaxTurns){
+    document.getElementById('c-last-box').style.display='none';
+    document.getElementById('c-input').style.display='none';
+    const addBtn=document.getElementById('c-add-btn');
+    addBtn.textContent='🎉 revelar história completa';
+    addBtn.onclick=showCadaverEnd;
+    document.getElementById('c-info').textContent='A história chegou ao fim!';
+  } else {
+    document.getElementById('c-last-box').style.display='';
+    document.getElementById('c-input').style.display='';
+    const addBtn=document.getElementById('c-add-btn');
+    addBtn.textContent='adicionar palavra';
+    addBtn.onclick=addWord;
+    document.getElementById('c-input').focus();
+  }
+}
+function addWord(){
+  if(cTurn>=cMaxTurns)return;
+  const v=document.getElementById('c-input').value.trim();
+  if(!v)return;
+  // só aceita a primeira palavra
+  const word=v.split(/\s+/)[0];
+  cWords.push(word);
+  cTurn++;cPlayer=cPlayer===1?2:1;
+  renderCadaver();
+}
+function showCadaverEnd(){
+  const story=cWords.join(' ');
+  document.getElementById('c-last-box').innerHTML=`<div class="cad-last-label">história completa</div><div style="font-size:16px;line-height:1.9;color:var(--text);margin-top:.5rem">${story}</div>`;
+  document.getElementById('c-last-box').style.display='';
+  document.getElementById('c-input').style.display='none';
+  const addBtn=document.getElementById('c-add-btn');
+  addBtn.textContent='jogar de novo';
+  addBtn.onclick=()=>goSetup('cadaver');
+  saveHistory('cadaver',cTurn*5,`${cTurn} turnos · ${cWords.length} palavras`);
+}
+
+// ══ ANAGRAMA ══
+const anagramaAll=[
+  {word:"BRASIL",hint:"País da América do Sul",category:"países"},
+  {word:"ESCOLA",hint:"Lugar onde se aprende",category:"lugares"},
+  {word:"FUTEBOL",hint:"Esporte mais popular do Brasil",category:"esportes"},
+  {word:"MUSICA",hint:"Arte dos sons",category:"artes"},
+  {word:"PYTHON",hint:"Linguagem de programação",category:"tecnologia"},
+  {word:"OCEANO",hint:"Grande extensão de água salgada",category:"natureza"},
+  {word:"PLANETA",hint:"Corpo celeste que orbita uma estrela",category:"ciência"},
+  {word:"CAMERA",hint:"Dispositivo para fotos e vídeos",category:"tecnologia"},
+  {word:"ARVORE",hint:"Planta de grande porte com tronco",category:"natureza"},
+  {word:"CINEMA",hint:"Arte e local para assistir filmes",category:"entretenimento"},
+  {word:"LIVRO",hint:"Conjunto de páginas com texto",category:"cultura"},
+  {word:"JANELA",hint:"Abertura na parede para ventilação",category:"arquitetura"},
+  {word:"TIGRE",hint:"Felino listrado da Ásia",category:"animais"},
+  {word:"NUVEM",hint:"Massa de vapor d'água no céu",category:"natureza"},
+  {word:"CHUVA",hint:"Precipitação de água do céu",category:"clima"},
+  {word:"SONHO",hint:"O que acontece enquanto dormimos",category:"conceitos"},
+  {word:"CHAVE",hint:"Instrumento para abrir fechaduras",category:"objetos"},
+  {word:"PRAIA",hint:"Faixa de areia à beira do mar",category:"lugares"},
+  {word:"RELÓGIO",hint:"Instrumento que mede o tempo",category:"objetos"},
+  {word:"CAVALO",hint:"Animal de carga e corrida",category:"animais"},
+  {word:"FOGUETE",hint:"Veículo para o espaço",category:"tecnologia"},
+  {word:"GELADO",hint:"Muito frio",category:"conceitos"},
+  {word:"ESTRADA",hint:"Via para automóveis fora das cidades",category:"lugares"},
+  {word:"CHAPÉU",hint:"Acessório que se usa na cabeça",category:"moda"},
+  {word:"DRAGÃO",hint:"Criatura mítica que cospe fogo",category:"fantasia"},
+  {word:"ESPELHO",hint:"Superfície que reflete imagens",category:"objetos"},
+  {word:"FLORESTA",hint:"Grande área coberta de árvores",category:"natureza"},
+  {word:"GALINHA",hint:"Ave doméstica que bota ovos",category:"animais"},
+  {word:"HOSPITAL",hint:"Local de tratamento médico",category:"lugares"},
+  {word:"INVERNO",hint:"Estação mais fria do ano",category:"estações"},
+  {word:"JULGAMENTO",hint:"Processo jurídico de decisão",category:"direito"},
+  {word:"LABIRINTO",hint:"Conjunto de caminhos confusos",category:"conceitos"},
+  {word:"MACACO",hint:"Primata inteligente",category:"animais"},
+  {word:"NARIZ",hint:"Órgão do olfato no centro do rosto",category:"corpo"},
+  {word:"ÓCULOS",hint:"Lentes para corrigir a visão",category:"objetos"},
+  {word:"PINGUIM",hint:"Ave que não voa e vive no frio",category:"animais"},
+  {word:"QUEIJO",hint:"Alimento feito de leite coalhado",category:"comida"},
+  {word:"ROBÔ",hint:"Máquina programável",category:"tecnologia"},
+  {word:"SUBMARINO",hint:"Veículo que navega submerso",category:"transporte"},
+  {word:"TELEFONE",hint:"Aparelho de comunicação por voz",category:"tecnologia"},
+  {word:"UNIVERSO",hint:"Tudo que existe no espaço",category:"ciência"},
+  {word:"VAMPIRO",hint:"Criatura mitológica que bebe sangue",category:"fantasia"},
+  {word:"XÍCARA",hint:"Recipiente para tomar chá ou café",category:"objetos"},
+  {word:"ZEBRA",hint:"Animal africano listrado em preto e branco",category:"animais"},
+  {word:"VIOLÃO",hint:"Instrumento de cordas tocado com dedos",category:"música"},
+  {word:"TECLADO",hint:"Dispositivo de entrada com teclas",category:"tecnologia"},
+  {word:"SATÉLITE",hint:"Objeto que orbita um planeta",category:"ciência"},
+  {word:"RÁDIO",hint:"Aparelho de comunicação por ondas",category:"tecnologia"},
+  {word:"POLVO",hint:"Molusco com oito tentáculos",category:"animais"},
+  {word:"OXIGÊNIO",hint:"Gás essencial para a respiração",category:"ciência"},
+];
+
+let anIdx=0,anScore=0,anCorrect=0,anShuffled=[],anTotal=10;
+let anCurrent=null,anSelected=[],anHintUsed=false;
+function initAnagrama(rounds){
+  anIdx=0;anScore=0;anCorrect=0;anTotal=Math.min(rounds,anagramaAll.length);
+  anShuffled=[...anagramaAll].sort(()=>Math.random()-.5).slice(0,anTotal);
+  renderAnagrama();
+}
+function shuffle(arr){return [...arr].sort(()=>Math.random()-.5);}
+function renderAnagrama(){
+  if(anIdx>=anShuffled.length){showFinal();return;}
+  anCurrent=anShuffled[anIdx];
+  anSelected=[];anHintUsed=false;
+  const letters=shuffle(anCurrent.word.split(''));
+  document.getElementById('an-bar').style.width=(anIdx/anShuffled.length*100)+'%';
+  document.getElementById('an-round').textContent=(anIdx+1)+'/'+anShuffled.length;
+  document.getElementById('an-score').textContent=anScore;
+  document.getElementById('an-cat').textContent=anCurrent.category;
+  document.getElementById('an-fb').textContent='';
+  document.getElementById('an-next').classList.remove('show');
+  document.getElementById('an-hint').textContent='Clique nas letras para formar a palavra';
+  renderAnagramTiles(letters);
+  renderAnagramSlots();
+}
+function renderAnagramTiles(letters){
+  document.getElementById('an-tiles').innerHTML=letters.map((l,i)=>
+    `<div class="letter-tile" id="tile-${i}" onclick="selectLetter(${i},'${l}')">${l}</div>`
+  ).join('');
+}
+function renderAnagramSlots(){
+  const len=anCurrent.word.length;
+  document.getElementById('an-slots').innerHTML=Array(len).fill(0).map((_,i)=>
+    `<div class="answer-slot${anSelected[i]?' filled':''}" id="slot-${i}">${anSelected[i]||''}</div>`
+  ).join('');
+}
+function selectLetter(idx,letter){
+  const tile=document.getElementById('tile-'+idx);
+  if(tile.classList.contains('disabled'))return;
+  if(anSelected.length>=anCurrent.word.length)return;
+  tile.classList.add('disabled');
+  anSelected.push({letter,tileIdx:idx});
+  renderAnagramSlots();
+  if(anSelected.length===anCurrent.word.length)checkAnagram();
+}
+function anagramClear(){
+  document.querySelectorAll('.letter-tile').forEach(t=>t.classList.remove('disabled'));
+  anSelected=[];
+  renderAnagramSlots();
+}
+function anagramHint(){
+  if(anHintUsed)return;
+  anHintUsed=true;
+  document.getElementById('an-hint').textContent='💡 Dica: '+anCurrent.hint;
+}
+function checkAnagram(){
+  const formed=anSelected.map(s=>s.letter).join('');
+  const fb=document.getElementById('an-fb');
+  if(formed===anCurrent.word){
+    anScore+=anHintUsed?5:10;anCorrect++;
+    fb.textContent='✓ Correto'+(anHintUsed?' (dica usada, +5 pts)':'!');;fb.style.color='var(--green)';
+    document.querySelectorAll('.answer-slot').forEach(s=>s.style.borderColor='var(--green)');
+  } else {
+    fb.textContent=`✗ Era "${anCurrent.word}"`;fb.style.color='var(--red)';
+    document.querySelectorAll('.answer-slot').forEach(s=>s.style.borderColor='var(--red)');
+  }
+  document.getElementById('an-score').textContent=anScore;
+  document.getElementById('an-next').classList.add('show');
+}
+function anagramNext(){anIdx++;renderAnagrama();}
+
+// ══ FINAL ══
+function showFinal(){
+  let score=0,correct=0,total=0;
+  if(currentGame==='emoji'){score=eScore;correct=eCorrect;total=eShuffled.length;saveHistory('emoji',score,`${correct}/${total} acertos`);}
+  else if(currentGame==='impostor'){score=iScore;correct=iCorrect;total=iShuffled.length;saveHistory('impostor',score,`${correct}/${total} acertos`);}
+  else if(currentGame==='anagrama'){score=anScore;correct=anCorrect;total=anShuffled.length;saveHistory('anagrama',score,`${correct}/${total} acertos`);}
+  const pct=total>0?Math.round(correct/total*100):0;
+  let emoji='🤔',title='Não foi dessa vez!',msg='Tente de novo para melhorar!';
+  if(pct>=80){emoji='🏆';title='Excelente!';msg='Você arrasou! Pontuação impressionante.';}
+  else if(pct>=50){emoji='😄';title='Boa jogada!';msg='Você passou da metade — continue assim!';}
+  document.getElementById('f-emoji').textContent=emoji;
+  document.getElementById('f-title').textContent=title+' — '+score+' pontos';
+  document.getElementById('f-sub').textContent=msg;
+  document.getElementById('f-play-again').onclick=()=>goSetup(currentGame);
+  showScreen('final');
+}
+</script>
+</body>
+</html>
