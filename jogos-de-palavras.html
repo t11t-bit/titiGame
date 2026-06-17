@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>TitiGame — Jogos de Palavras</title>
 <style>
-:root[data-theme="dark"]{--bg:#0e0e11;--bg2:#16161a;--bg3:#1e1e24;--bg4:#2a2a33;--border:rgba(255,255,255,0.08);--border2:rgba(255,255,255,0.14);--text:#f0f0f4;--text2:#a0a0b0;--text3:#606070;--accent:#7c6ff7;--accent-light:#a99af9;--accent-bg:rgba(124,111,247,0.15);--green:#4caf7d;--green-bg:rgba(76,175,125,0.15);--red:#e05c5c;--red-bg:rgba(224,92,92,0.15);--card-shadow:0 2px 16px rgba(0,0,0,0.4);--amber:#f0a03c;--amber-bg:rgba(240,160,60,0.15);}
-:root[data-theme="light"]{--bg:#f4f4f8;--bg2:#ffffff;--bg3:#eaeaf0;--bg4:#dddde8;--border:rgba(0,0,0,0.08);--border2:rgba(0,0,0,0.14);--text:#111118;--text2:#5a5a70;--text3:#9090a8;--accent:#5b52e8;--accent-light:#7c74f0;--accent-bg:rgba(91,82,232,0.1);--green:#2d8c5c;--green-bg:rgba(45,140,92,0.12);--red:#c93030;--red-bg:rgba(201,48,48,0.1);--card-shadow:0 2px 12px rgba(0,0,0,0.08);--amber:#b86e00;--amber-bg:rgba(184,110,0,0.1);}
+:root[data-theme="dark"]{--bg:#0e0e11;--bg2:#16161a;--bg3:#1e1e24;--bg4:#2a2a33;--border:rgba(255,255,255,0.08);--border2:rgba(255,255,255,0.14);--text:#f0f0f4;--text2:#a0a0b0;--text3:#606070;--accent:#7c6ff7;--accent-light:#a99af9;--accent-bg:rgba(124,111,247,0.15);--green:#4caf7d;--green-bg:rgba(76,175,125,0.15);--red:#e05c5c;--red-bg:rgba(224,92,92,0.15);--card-shadow:0 2px 16px rgba(0,0,0,0.4);--amber:#f0a03c;--amber-bg:rgba(240,160,60,0.15);--yellow:#c9a227;--yellow-bg:rgba(201,162,39,0.25);}
+:root[data-theme="light"]{--bg:#f4f4f8;--bg2:#ffffff;--bg3:#eaeaf0;--bg4:#dddde8;--border:rgba(0,0,0,0.08);--border2:rgba(0,0,0,0.14);--text:#111118;--text2:#5a5a70;--text3:#9090a8;--accent:#5b52e8;--accent-light:#7c74f0;--accent-bg:rgba(91,82,232,0.1);--green:#2d8c5c;--green-bg:rgba(45,140,92,0.12);--red:#c93030;--red-bg:rgba(201,48,48,0.1);--card-shadow:0 2px 12px rgba(0,0,0,0.08);--amber:#b86e00;--amber-bg:rgba(184,110,0,0.1);--yellow:#a8841a;--yellow-bg:rgba(168,132,26,0.18);}
 *{margin:0;padding:0;box-sizing:border-box;}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;transition:background .25s,color .25s;}
 nav{display:flex;align-items:center;justify-content:space-between;padding:0 2rem;height:56px;border-bottom:1px solid var(--border);background:var(--bg2);position:sticky;top:0;z-index:100;}
@@ -33,6 +33,7 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:0 2rem
 .badge-purple{background:rgba(124,111,247,.15);color:var(--accent-light);}
 .badge-green{background:rgba(76,175,125,.15);color:var(--green);}
 .badge-amber{background:var(--amber-bg);color:var(--amber);}
+.badge-yellow{background:var(--yellow-bg);color:var(--yellow);}
 
 /* SETUP SCREEN */
 .setup-screen{max-width:480px;margin:0 auto;padding:2rem 1.5rem 4rem;}
@@ -83,7 +84,6 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:0 2rem
 .cad-last-word{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:2rem;text-align:center;margin-bottom:.75rem;}
 .cad-last-label{font-size:11px;text-transform:uppercase;letter-spacing:1.2px;color:var(--text3);margin-bottom:.75rem;}
 .cad-last-val{font-size:32px;font-weight:700;color:var(--accent-light);}
-.cad-story-reveal{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:1.5rem;font-size:16px;line-height:1.9;color:var(--text);margin-bottom:1rem;max-height:300px;overflow-y:auto;}
 .word-input{width:100%;padding:.875rem 1rem;background:var(--bg3);border:1px solid var(--border2);border-radius:12px;color:var(--text);font-size:16px;outline:none;margin-bottom:.75rem;transition:border-color .15s;}
 .word-input:focus{border-color:var(--accent);}
 .word-input::placeholder{color:var(--text3);}
@@ -93,17 +93,36 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:0 2rem
 
 /* ANAGRAMA */
 .anagram-word{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-bottom:1.25rem;}
-.letter-tile{width:44px;height:52px;background:var(--bg3);border:1px solid var(--border2);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:700;color:var(--text);cursor:pointer;transition:background .15s,transform .1s;user-select:none;}
+.letter-tile{width:44px;height:52px;background:var(--bg3);border:1px solid var(--border2);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:700;color:var(--text);cursor:pointer;transition:background .15s,transform .1s,opacity .15s;user-select:none;}
 .letter-tile:hover{background:var(--bg4);transform:scale(1.05);}
-.letter-tile.selected{background:var(--accent-bg);border-color:var(--accent);color:var(--accent-light);}
-.letter-tile.disabled{opacity:.3;cursor:default;}
+.letter-tile.disabled{opacity:.25;cursor:default;pointer-events:none;}
 .answer-slots{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-bottom:1.5rem;min-height:60px;}
-.answer-slot{width:44px;height:52px;border-bottom:2px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:700;color:var(--text);}
-.answer-slot.filled{border-color:var(--accent);}
-.anagram-hint{font-size:13px;color:var(--text3);text-align:center;margin-bottom:1rem;}
+.answer-slot{width:44px;height:52px;border-bottom:2px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:700;color:var(--text);cursor:pointer;border-radius:6px;transition:border-color .15s;}
+.answer-slot.filled{border-color:var(--accent);background:var(--accent-bg);}
+.anagram-hint{font-size:13px;color:var(--text3);text-align:center;margin-bottom:1rem;min-height:18px;}
 .anagram-actions{display:flex;gap:10px;margin-bottom:.75rem;}
 .anagram-actions button{flex:1;padding:.75rem;border-radius:12px;border:1px solid var(--border2);background:var(--bg3);color:var(--text);font-size:14px;cursor:pointer;transition:background .15s;}
 .anagram-actions button:hover{background:var(--bg4);}
+
+/* TITERMO */
+.titermo-grid{display:flex;flex-direction:column;gap:8px;margin-bottom:1.25rem;align-items:center;}
+.titermo-row{display:flex;gap:8px;}
+.titermo-cell{width:48px;height:48px;border:2px solid var(--border2);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:700;color:var(--text);text-transform:uppercase;background:var(--bg3);transition:background .3s,border-color .3s,transform .15s;}
+.titermo-cell.filled{border-color:var(--text3);}
+.titermo-cell.correct{background:var(--green);border-color:var(--green);color:#fff;}
+.titermo-cell.present{background:var(--yellow);border-color:var(--yellow);color:#fff;}
+.titermo-cell.absent{background:var(--bg4);border-color:var(--border2);color:var(--text3);}
+.titermo-cell.pop{animation:tpop .12s ease;}
+@keyframes tpop{0%{transform:scale(1.12)}100%{transform:scale(1)}}
+.titermo-keyboard{display:flex;flex-direction:column;gap:6px;align-items:center;margin-top:1rem;}
+.titermo-krow{display:flex;gap:5px;}
+.tkey{min-width:30px;height:42px;padding:0 8px;border-radius:6px;border:none;background:var(--bg3);color:var(--text);font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s;}
+.tkey:hover{background:var(--bg4);}
+.tkey.correct{background:var(--green);color:#fff;}
+.tkey.present{background:var(--yellow);color:#fff;}
+.tkey.absent{background:var(--bg4);color:var(--text3);opacity:.5;}
+.tkey-wide{min-width:52px;font-size:11px;}
+.titermo-msg{text-align:center;font-size:14px;min-height:22px;margin:.75rem 0;color:var(--text2);}
 
 /* HISTÓRICO */
 .history-screen{max-width:700px;margin:0 auto;padding:2rem 1.5rem 4rem;}
@@ -145,13 +164,13 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:0 2rem
 <div class="screen active" id="screen-menu">
   <div class="menu-hero">
     <h1>Escolha seu <span>jogo</span></h1>
-    <p>3 modos de jogo — sozinho ou com amigos</p>
+    <p>5 modos de jogo — sozinho ou com amigos</p>
   </div>
   <div class="game-grid">
     <div class="game-card" onclick="goSetup('emoji')">
       <span class="game-card-icon">🎯</span>
       <h2>Adivinhe pelo emoji</h2>
-      <p>Descubra a palavra ou frase escondida a partir de uma sequência de emojis. Quanto mais você acerta, mais pontos ganha.</p>
+      <p>Descubra a palavra ou frase escondida a partir de uma sequência de emojis. Quanto mais difícil o nível, menos óbvias são as pistas.</p>
       <span class="badge badge-purple">solo · até 50 rodadas</span>
     </div>
     <div class="game-card" onclick="goSetup('impostor')">
@@ -169,8 +188,14 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:0 2rem
     <div class="game-card" onclick="goSetup('anagrama')">
       <span class="game-card-icon">🔤</span>
       <h2>Anagrama</h2>
-      <p>As letras de uma palavra estão embaralhadas. Reorganize-as na ordem certa antes de ficar sem tentativas. Use a dica se precisar!</p>
+      <p>As letras de uma palavra estão embaralhadas. Reorganize-as na ordem certa. Use a dica se precisar!</p>
       <span class="badge badge-purple">solo · até 50 rodadas</span>
+    </div>
+    <div class="game-card" onclick="goSetup('titermo')">
+      <span class="game-card-icon">🟩</span>
+      <h2>Titermo</h2>
+      <p>Inspirado no clássico jogo de adivinhação de palavras. Descubra a palavra secreta em até 6 tentativas usando as cores como pista.</p>
+      <span class="badge badge-yellow">solo · até 50 palavras</span>
     </div>
   </div>
 </div>
@@ -182,7 +207,7 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:0 2rem
     <div class="setup-title" id="setup-title"></div>
     <div class="setup-sub" id="setup-sub"></div>
     <div class="setup-card">
-      <span class="setup-label">quantas rodadas?</span>
+      <span class="setup-label" id="rounds-label">quantas rodadas?</span>
       <div class="rounds-grid" id="rounds-grid"></div>
     </div>
     <button class="start-game-btn" onclick="launchGame()">jogar →</button>
@@ -266,6 +291,21 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:0 2rem
   </div>
 </div>
 
+<!-- ══ TITERMO ══ -->
+<div class="screen" id="screen-titermo">
+  <div class="game-screen">
+    <button class="back-btn" onclick="goMenu()">← voltar ao menu</button>
+    <div class="hud">
+      <div class="hud-item">pontos <span class="hud-val" id="t-score">0</span></div>
+      <div class="hud-item" style="text-align:right">palavra <span class="hud-val" id="t-round">1/10</span></div>
+    </div>
+    <div class="titermo-grid" id="t-grid"></div>
+    <div class="titermo-msg" id="t-msg"></div>
+    <div class="titermo-keyboard" id="t-keyboard"></div>
+    <button class="next-btn" id="t-next" onclick="titermoNext()">próxima palavra →</button>
+  </div>
+</div>
+
 <!-- ══ HISTÓRICO ══ -->
 <div class="screen" id="screen-historico">
   <div class="history-screen">
@@ -304,13 +344,17 @@ function toggleTheme(){
 }
 
 // ── SCREENS ──
-function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById('screen-'+id).classList.add('active');}
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('screen-'+id).classList.add('active');
+  if(id==='historico')renderHistory();
+}
 function goMenu(){showScreen('menu');}
 
 // ── HISTORY ──
 let gameHistory=JSON.parse(localStorage.getItem('titigame_history')||'[]');
-const gameNames={emoji:'Emoji',impostor:'Impostor',cadaver:'Cadáver',anagrama:'Anagrama'};
-const gameIcons={emoji:'🎯',impostor:'🕵️',cadaver:'✍️',anagrama:'🔤'};
+const gameNames={emoji:'Emoji',impostor:'Impostor',cadaver:'Cadáver',anagrama:'Anagrama',titermo:'Titermo'};
+const gameIcons={emoji:'🎯',impostor:'🕵️',cadaver:'✍️',anagrama:'🔤',titermo:'🟩'};
 function saveHistory(game,score,detail){
   const entry={game,score,detail,date:new Date().toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'})};
   gameHistory.unshift(entry);
@@ -331,20 +375,18 @@ function renderHistory(){
         <div class="history-detail">${h.detail}</div>
       </div>
     </div>`).join('');
-  if(gameHistory.length)el.innerHTML+=`<button class="history-clear" onclick="clearHistory()">limpar histórico</button>`;
+  el.innerHTML+=`<button class="history-clear" onclick="clearHistory()">limpar histórico</button>`;
 }
 function clearHistory(){gameHistory=[];localStorage.removeItem('titigame_history');renderHistory();}
-document.getElementById('screen-historico').addEventListener('transitionend',renderHistory);
-const origShowScreen=showScreen;
-window.showScreen=function(id){origShowScreen(id);if(id==='historico')renderHistory();};
 
 // ── SETUP ──
 let pendingGame='', selectedRounds=10;
 const setupInfo={
-  emoji:{title:'Adivinhe pelo emoji',sub:'Descubra a palavra pelos emojis. Escolha quantas rodadas quer jogar.'},
-  impostor:{title:'Caça ao impostor',sub:'Encontre a palavra que não pertence ao grupo. Escolha quantas rodadas.'},
-  cadaver:{title:'Cadáver esquisito',sub:'Construa a história palavra por palavra. Escolha quantos turnos terá a história.'},
-  anagrama:{title:'Anagrama',sub:'Reorganize as letras para formar a palavra correta. Escolha quantas rodadas.'},
+  emoji:{title:'Adivinhe pelo emoji',sub:'Descubra a palavra pelos emojis. Escolha quantas rodadas quer jogar.',label:'quantas rodadas?'},
+  impostor:{title:'Caça ao impostor',sub:'Encontre a palavra que não pertence ao grupo. Escolha quantas rodadas.',label:'quantas rodadas?'},
+  cadaver:{title:'Cadáver esquisito',sub:'Construa a história palavra por palavra. Escolha quantos turnos terá a história.',label:'quantos turnos?'},
+  anagrama:{title:'Anagrama',sub:'Reorganize as letras para formar a palavra correta. Escolha quantas rodadas.',label:'quantas rodadas?'},
+  titermo:{title:'Titermo',sub:'Descubra a palavra secreta em até 6 tentativas. Escolha quantas palavras quer jogar.',label:'quantas palavras?'},
 };
 const roundOptions=[5,10,15,20,25,30,40,50];
 
@@ -352,6 +394,7 @@ function goSetup(game){
   pendingGame=game; selectedRounds=10;
   document.getElementById('setup-title').textContent=setupInfo[game].title;
   document.getElementById('setup-sub').textContent=setupInfo[game].sub;
+  document.getElementById('rounds-label').textContent=setupInfo[game].label;
   const grid=document.getElementById('rounds-grid');
   grid.innerHTML=roundOptions.map(n=>`<button class="r-btn${n===10?' active':''}" onclick="selectRounds(${n},this)">${n}</button>`).join('');
   showScreen('setup');
@@ -370,67 +413,92 @@ function startGame(game,rounds){
   else if(game==='impostor')initImpostor(rounds);
   else if(game==='cadaver')initCadaver(rounds);
   else if(game==='anagrama')initAnagrama(rounds);
+  else if(game==='titermo')initTitermo(rounds);
   showScreen(game);
 }
 
-// ══ EMOJI GAME ══
+// ══ EMOJI GAME (maioria difícil/muito difícil) ══
 const emojiAll=[
-  {emojis:"🦁👑🌍",answer:"Rei Leão",options:["Rei Leão","Simba","Savana","Leão Selvagem"],category:"filmes"},
-  {emojis:"🕷️🕸️👦",answer:"Homem-Aranha",options:["Homem-Aranha","Batman","Super-Homem","Tarântula"],category:"super-heróis"},
-  {emojis:"🍕🇮🇹❤️",answer:"Itália",options:["Itália","Pizza","Roma","Nápoles"],category:"países"},
-  {emojis:"⏰🐊🏴‍☠️",answer:"Peter Pan",options:["Peter Pan","Piratas","Wendy","Neverland"],category:"personagens"},
-  {emojis:"🌹📚👸🐻",answer:"A Bela e a Fera",options:["A Bela e a Fera","Branca de Neve","Cinderela","Rapunzel"],category:"contos"},
-  {emojis:"🎩🐇✨",answer:"Mágica",options:["Mágica","Circo","Ilusão","Chapéu"],category:"palavras"},
-  {emojis:"🐘🇧🇷🎉",answer:"Carnaval",options:["Carnaval","Festa","Brasil","Samba"],category:"cultura"},
-  {emojis:"🌊🐠🐙",answer:"Fundo do Mar",options:["Fundo do Mar","Praia","Aquário","Coral"],category:"lugares"},
-  {emojis:"☕📖🌧️",answer:"Tarde preguiçosa",options:["Tarde preguiçosa","Inverno","Biblioteca","Café da manhã"],category:"momentos"},
-  {emojis:"🚀🌕👨‍🚀",answer:"Apollo 11",options:["Apollo 11","Nasa","Galáxia","Saturno"],category:"história"},
-  {emojis:"🎸🤘🔥",answer:"Rock and Roll",options:["Rock and Roll","Show","Metal","Banda"],category:"música"},
-  {emojis:"🐍🧙‍♂️⚡",answer:"Harry Potter",options:["Harry Potter","Gandalf","Voldemort","Dumbledore"],category:"filmes"},
-  {emojis:"🍌🐒🌴",answer:"Selva",options:["Selva","Zoológico","Macaco","Floresta"],category:"lugares"},
-  {emojis:"❄️👸✨",answer:"Frozen",options:["Frozen","Cinderela","Neve","Elsa"],category:"filmes"},
-  {emojis:"🎃👻🕯️",answer:"Halloween",options:["Halloween","Terror","Festa","Bruxas"],category:"datas"},
-  {emojis:"💍💒👰",answer:"Casamento",options:["Casamento","Noivado","Festa","Aliança"],category:"eventos"},
-  {emojis:"🌋🔥💨",answer:"Vulcão",options:["Vulcão","Montanha","Explosão","Lava"],category:"natureza"},
-  {emojis:"🧠💡🔬",answer:"Ciência",options:["Ciência","Invenção","Laboratório","Gênio"],category:"conhecimento"},
-  {emojis:"🦸‍♀️🌟💪",answer:"Super-Heroína",options:["Super-Heroína","Maga","Princesa","Guerreira"],category:"personagens"},
-  {emojis:"🎭😂😭",answer:"Teatro",options:["Teatro","Cinema","Emoção","Arte"],category:"cultura"},
-  {emojis:"🌞🏖️🍦",answer:"Verão",options:["Verão","Férias","Praia","Calor"],category:"estações"},
-  {emojis:"🧩🤔💭",answer:"Quebra-cabeça",options:["Quebra-cabeça","Enigma","Raciocínio","Jogo"],category:"jogos"},
-  {emojis:"🎤🎶🌟",answer:"Show de música",options:["Show de música","Karaokê","Rádio","Concerto"],category:"eventos"},
-  {emojis:"🐉🔥🏰",answer:"Dragão",options:["Dragão","Castelo","Fogo","Monstro"],category:"fantasia"},
-  {emojis:"👨‍🍳🔪🍳",answer:"Cozinheiro",options:["Cozinheiro","Chef","Restaurante","Cozinha"],category:"profissões"},
-  {emojis:"📱💬❤️",answer:"Mensagem de amor",options:["Mensagem de amor","Aplicativo","Conversa","Redes sociais"],category:"momentos"},
-  {emojis:"🚂🌲🏔️",answer:"Viagem de trem",options:["Viagem de trem","Locomotiva","Estrada de ferro","Aventura"],category:"transporte"},
-  {emojis:"🎓📜👩‍🏫",answer:"Formatura",options:["Formatura","Escola","Diploma","Professora"],category:"eventos"},
-  {emojis:"🕰️🔍🕵️",answer:"Detetive",options:["Detetive","Mistério","Investigação","Policial"],category:"personagens"},
-  {emojis:"🌈☔🌦️",answer:"Arco-íris",options:["Arco-íris","Chuva","Tempestade","Nuvem"],category:"natureza"},
-  {emojis:"🐝🌸🍯",answer:"Mel",options:["Mel","Abelha","Flor","Primavera"],category:"natureza"},
-  {emojis:"🧲⚡🔋",answer:"Eletricidade",options:["Eletricidade","Energia","Imã","Bateria"],category:"ciência"},
-  {emojis:"🎪🤹🎡",answer:"Parque de diversões",options:["Parque de diversões","Circo","Festa","Carnaval"],category:"lugares"},
-  {emojis:"📸🌅✈️",answer:"Lua de mel",options:["Lua de mel","Viagem","Fotografia","Casamento"],category:"viagem"},
-  {emojis:"🦊🌲❄️",answer:"Zootopia",options:["Zootopia","A Raposa","Bambi","O Rei Leão"],category:"filmes"},
-  {emojis:"🏋️💪🥊",answer:"Academia",options:["Academia","Boxe","Musculação","Esporte"],category:"fitness"},
-  {emojis:"🌙⭐🔭",answer:"Astronomia",options:["Astronomia","Noite","Estrela","Telescópio"],category:"ciência"},
-  {emojis:"🎲🃏🏆",answer:"Jogo de tabuleiro",options:["Jogo de tabuleiro","Cartas","Cassino","Xadrez"],category:"jogos"},
-  {emojis:"🍜🥢🌶️",answer:"Ramen",options:["Ramen","Sushi","Comida japonesa","Macarrão"],category:"comida"},
-  {emojis:"🦋🌺🌿",answer:"Jardim",options:["Jardim","Borboleta","Flor","Natureza"],category:"lugares"},
-  {emojis:"📚🕯️🦉",answer:"Biblioteca",options:["Biblioteca","Estudo","Coruja","Conhecimento"],category:"lugares"},
-  {emojis:"🎠🌈🍭",answer:"Fantasia",options:["Fantasia","Circo","Sonho","Parque"],category:"conceitos"},
-  {emojis:"⚽🏟️📺",answer:"Copa do Mundo",options:["Copa do Mundo","Campeonato","Futebol","Estádio"],category:"esportes"},
-  {emojis:"🌵🤠🐎",answer:"Faroeste",options:["Faroeste","Deserto","Cowboys","Velho Oeste"],category:"filmes"},
-  {emojis:"🦈🌊🏄",answer:"Tubarão",options:["Tubarão","Surfista","Oceano","Onda"],category:"natureza"},
-  {emojis:"🎸🎵🌟",answer:"Estrela do rock",options:["Estrela do rock","Músico","Cantor","Bandas"],category:"música"},
-  {emojis:"🏔️🧗🎒",answer:"Escalada",options:["Escalada","Montanhismo","Trilha","Aventura"],category:"esportes"},
-  {emojis:"🌺🏝️🌊",answer:"Hawaii",options:["Hawaii","Polinésia","Ilha","Paraíso"],category:"lugares"},
-  {emojis:"🎬🍿🌟",answer:"Cinema",options:["Cinema","Filme","Pipoca","Hollywood"],category:"entretenimento"},
-  {emojis:"🦚🎨🖌️",answer:"Arte",options:["Arte","Pavão","Pintura","Museu"],category:"cultura"},
+  // FÁCEIS — poucas, só pra abrir o jogo
+  {emojis:"🦁👑🌍",answer:"Rei Leão",options:["Rei Leão","Simba","Savana","Leão Selvagem"],category:"filmes",dificuldade:1},
+  {emojis:"🍕🇮🇹❤️",answer:"Itália",options:["Itália","Pizza","Roma","Nápoles"],category:"países",dificuldade:1},
+  {emojis:"🎃👻🕯️",answer:"Halloween",options:["Halloween","Terror","Festa","Bruxas"],category:"datas",dificuldade:1},
+  {emojis:"🎬🍿🌟",answer:"Cinema",options:["Cinema","Filme","Pipoca","Hollywood"],category:"entretenimento",dificuldade:1},
+  {emojis:"🐘🇧🇷🎉",answer:"Carnaval",options:["Carnaval","Festa","Brasil","Samba"],category:"cultura",dificuldade:1},
+  // MÉDIOS — poucas, transição
+  {emojis:"⏰🐊🏴‍☠️",answer:"Peter Pan",options:["Peter Pan","Piratas","Wendy","Capitão Gancho"],category:"personagens",dificuldade:2},
+  {emojis:"🐍🧙‍♂️⚡",answer:"Harry Potter",options:["Harry Potter","Gandalf","Voldemort","Dumbledore"],category:"filmes",dificuldade:2},
+  {emojis:"🌋🔥💨",answer:"Vulcão",options:["Vulcão","Terremoto","Tsunami","Lava"],category:"natureza",dificuldade:2},
+  {emojis:"🐉🔥🏰",answer:"Game of Thrones",options:["Game of Thrones","O Hobbit","Shrek","Senhor dos Anéis"],category:"séries",dificuldade:2},
+  {emojis:"🦈🌊🏄",answer:"Tubarão (filme)",options:["Tubarão (filme)","Surfista","Praia Perigosa","Oceano Profundo"],category:"filmes",dificuldade:2},
+  // DIFÍCEIS — agora é o grosso do jogo
+  {emojis:"💔🩹⏳",answer:"Cicatrizar o coração",options:["Cicatrizar o coração","Recuperação","Tempo cura tudo","Saudade"],category:"expressões",dificuldade:3},
+  {emojis:"🐢🏆🐰",answer:"A Lebre e a Tartaruga",options:["A Lebre e a Tartaruga","Devagar se vai longe","Corrida Animal","Fábula de Esopo"],category:"fábulas",dificuldade:3},
+  {emojis:"🔄💰🏦",answer:"Juros Compostos",options:["Juros Compostos","Inflação","Investimento","Economia"],category:"finanças",dificuldade:3},
+  {emojis:"🧠🔌💭",answer:"Inteligência Artificial",options:["Inteligência Artificial","Neurociência","Robótica","Computação"],category:"tecnologia",dificuldade:3},
+  {emojis:"🐦🆓✈️",answer:"Liberdade",options:["Liberdade","Migração","Voo Livre","Independência"],category:"conceitos",dificuldade:3},
+  {emojis:"⏳💀👑",answer:"Tempo é Implacável",options:["Tempo é Implacável","Mortalidade","Reinado Eterno","Vaidade"],category:"expressões",dificuldade:3},
+  {emojis:"🌑🌗🌕",answer:"Fases da Lua",options:["Fases da Lua","Eclipse Lunar","Ciclo Lunar","Noite Estrelada"],category:"astronomia",dificuldade:3},
+  {emojis:"🧬🔬🦠",answer:"Biotecnologia",options:["Biotecnologia","Genética","Microbiologia","Vacina"],category:"ciência",dificuldade:3},
+  {emojis:"⚖️🏛️📜",answer:"Justiça",options:["Justiça","Tribunal","Constituição","Democracia"],category:"conceitos",dificuldade:3},
+  {emojis:"🎭🎪😈",answer:"Coringa",options:["Coringa","Palhaço Assassino","Circo do Mal","Anarquia"],category:"filmes",dificuldade:3},
+  {emojis:"🐺👦🌙",answer:"Lobisomem",options:["Lobisomem","Mogli","Lua Cheia","Crianças Selvagens"],category:"fantasia",dificuldade:3},
+  {emojis:"🪞🤳💭",answer:"Autoconhecimento",options:["Autoconhecimento","Vaidade","Reflexão","Narcisismo"],category:"conceitos",dificuldade:3},
+  {emojis:"🔄🦋💀",answer:"Ciclo da Vida",options:["Ciclo da Vida","Reencarnação","Evolução","Metamorfose"],category:"conceitos",dificuldade:3},
+  {emojis:"🕰️🔁😱",answer:"Feitiço do Tempo",options:["Feitiço do Tempo","Groundhog Day","Déjà Vu","Loop Temporal"],category:"filmes",dificuldade:3},
+  {emojis:"🎻🌧️😢",answer:"Melancolia",options:["Melancolia","Saudade","Música Triste","Solidão"],category:"emoções",dificuldade:3},
+  {emojis:"🦸‍♀️🌟💪",answer:"Super-Heroína",options:["Super-Heroína","Maga","Princesa Guerreira","Vilã"],category:"personagens",dificuldade:3},
+  {emojis:"🦊🌲❄️",answer:"Zootopia",options:["Zootopia","A Raposa e o Cão","Bambi","Madagascar"],category:"filmes",dificuldade:3},
+  {emojis:"🐝🌸🍯",answer:"Abelha Rainha",options:["Abelha Rainha","Apicultor","Colmeia","Mel"],category:"natureza",dificuldade:3},
+  {emojis:"🦋🌺🌿",answer:"Metamorfose",options:["Metamorfose","Jardim","Primavera","Polinização"],category:"conceitos",dificuldade:3},
+  {emojis:"🏔️🧗🎒",answer:"Alpinismo",options:["Alpinismo","Trilha","Acampamento","Expedição"],category:"esportes",dificuldade:3},
+  {emojis:"🦚🎨🖌️",answer:"Pintura Renascentista",options:["Pintura Renascentista","Museu de Arte","Pavão Real","Mosaico"],category:"arte",dificuldade:3},
+  // MUITO DIFÍCEIS — também maioria
+  {emojis:"🦅🇺🇸💵",answer:"Sonho Americano",options:["Sonho Americano","Capitalismo","Liberdade Econômica","Wall Street"],category:"expressões",dificuldade:4},
+  {emojis:"🪙🦁🏛️",answer:"Mitologia Grega",options:["Mitologia Grega","Império Romano","Esparta","Olimpo"],category:"história",dificuldade:4},
+  {emojis:"🌪️🏠👧",answer:"O Mágico de Oz",options:["O Mágico de Oz","Twister","Tornado Devastador","Kansas"],category:"filmes",dificuldade:4},
+  {emojis:"🔮👁️🃏",answer:"Vidência",options:["Vidência","Tarô","Cigana","Premonição"],category:"misticismo",dificuldade:4},
+  {emojis:"⚙️🧠🤖",answer:"Singularidade Tecnológica",options:["Singularidade Tecnológica","Robô Consciente","Inteligência Artificial","Ficção Científica"],category:"futurismo",dificuldade:4},
+  {emojis:"🍂🍃🦌",answer:"Outono",options:["Outono","Caça","Floresta","Migração"],category:"estações",dificuldade:4},
+  {emojis:"⚡🐸👑",answer:"O Príncipe Sapo",options:["O Príncipe Sapo","Conto de Fadas","Encantamento","Pântano Real"],category:"contos",dificuldade:4},
+  {emojis:"🧩🔓🧠",answer:"Resolução de Problemas",options:["Resolução de Problemas","Quebra-Cabeça Mental","Lógica","Enigma"],category:"conceitos",dificuldade:4},
+  {emojis:"🌊🔱👑",answer:"Poseidon",options:["Poseidon","Netuno","Rei dos Mares","Atlântida"],category:"mitologia",dificuldade:4},
+  {emojis:"🥀⌛💔",answer:"Amor que Acabou",options:["Amor que Acabou","Flor Murcha","Términos","Desilusão"],category:"expressões",dificuldade:4},
+  {emojis:"🕊️⚰️🌹",answer:"Luto",options:["Luto","Funeral","Velório","Perda"],category:"conceitos",dificuldade:4},
+  {emojis:"🌀🧠💊",answer:"Saúde Mental",options:["Saúde Mental","Ansiedade","Terapia","Psicologia"],category:"conceitos",dificuldade:4},
+  {emojis:"🦉📚🕯️",answer:"Sabedoria",options:["Sabedoria","Filosofia","Conhecimento Antigo","Estudo Noturno"],category:"conceitos",dificuldade:4},
+  {emojis:"🔥🐦⭐",answer:"Fênix",options:["Fênix","Renascimento","Pássaro de Fogo","Mitologia Egípcia"],category:"mitologia",dificuldade:4},
+  {emojis:"🎭🪞👤",answer:"Identidade",options:["Identidade","Persona","Dualidade","Hipocrisia"],category:"conceitos",dificuldade:4},
 ];
 
 let eIdx=0,eScore=0,eCorrect=0,eShuffled=[],eTotal=10;
 function initEmoji(rounds){
   eIdx=0;eScore=0;eCorrect=0;eTotal=Math.min(rounds,emojiAll.length);
-  eShuffled=[...emojiAll].sort(()=>Math.random()-.5).slice(0,eTotal);
+  // separa por dificuldade e embaralha cada grupo
+  const grouped={1:[],2:[],3:[],4:[]};
+  emojiAll.forEach(q=>grouped[q.dificuldade].push(q));
+  Object.keys(grouped).forEach(k=>grouped[k]=grouped[k].sort(()=>Math.random()-.5));
+  // pega uma proporção fixa de cada nível (poucas fáceis/médias, maioria difícil/muito difícil)
+  // proporção aproximada: 10% fácil, 15% médio, 40% difícil, 35% muito difícil
+  const nEasy=Math.max(1,Math.round(eTotal*0.10));
+  const nMed=Math.max(1,Math.round(eTotal*0.15));
+  const nHard=Math.round(eTotal*0.40);
+  const nVeryHard=eTotal-nEasy-nMed-nHard;
+  const picked=[
+    ...grouped[1].slice(0,Math.min(nEasy,grouped[1].length)),
+    ...grouped[2].slice(0,Math.min(nMed,grouped[2].length)),
+    ...grouped[3].slice(0,Math.min(nHard,grouped[3].length)),
+    ...grouped[4].slice(0,Math.min(nVeryHard,grouped[4].length)),
+  ];
+  // se faltar pra completar eTotal (banco pequeno em algum nível), completa com o que restar de qualquer nível
+  let pool=picked;
+  if(pool.length<eTotal){
+    const used=new Set(pool);
+    const rest=emojiAll.filter(q=>!used.has(q)).sort(()=>Math.random()-.5);
+    pool=[...pool,...rest].slice(0,eTotal);
+  }
+  // ordena por dificuldade crescente (começa mais tranquilo, fica puxado) mas mantendo embaralho dentro de cada nível
+  eShuffled=pool.sort((a,b)=>a.dificuldade-b.dificuldade).slice(0,eTotal);
   renderEmoji();
 }
 function renderEmoji(){
@@ -441,7 +509,8 @@ function renderEmoji(){
   document.getElementById('e-round').textContent=(eIdx+1)+'/'+eShuffled.length;
   document.getElementById('e-score').textContent=eScore;
   document.getElementById('e-emojis').textContent=r.emojis;
-  document.getElementById('e-cat').textContent=r.category;
+  const dificuldadeLabel=['','fácil','médio','difícil','muito difícil'][r.dificuldade];
+  document.getElementById('e-cat').textContent=r.category+' · '+dificuldadeLabel;
   document.getElementById('e-fb').textContent='';
   document.getElementById('e-next').classList.remove('show');
   document.getElementById('e-opts').innerHTML=opts.map(o=>`<button class="opt" onclick="chooseEmoji(this,'${o.replace(/'/g,"\\'")}','${r.answer.replace(/'/g,"\\'")}')">${o}</button>`).join('');
@@ -449,7 +518,8 @@ function renderEmoji(){
 function chooseEmoji(btn,chosen,answer){
   document.querySelectorAll('#e-opts .opt').forEach(b=>b.disabled=true);
   const fb=document.getElementById('e-fb');
-  if(chosen===answer){btn.classList.add('correct');eScore+=10;eCorrect++;fb.textContent='✓ Acertou!';fb.style.color='var(--green)';}
+  const pts=eShuffled[eIdx].dificuldade*10;
+  if(chosen===answer){btn.classList.add('correct');eScore+=pts;eCorrect++;fb.textContent='✓ Acertou! +'+pts+' pts';fb.style.color='var(--green)';}
   else{btn.classList.add('wrong');document.querySelectorAll('#e-opts .opt').forEach(b=>{if(b.textContent===answer)b.classList.add('correct');});fb.textContent=`✗ Era "${answer}"`;fb.style.color='var(--red)';}
   document.getElementById('e-score').textContent=eScore;
   document.getElementById('e-next').classList.add('show');
@@ -576,7 +646,6 @@ function addWord(){
   if(cTurn>=cMaxTurns)return;
   const v=document.getElementById('c-input').value.trim();
   if(!v)return;
-  // só aceita a primeira palavra
   const word=v.split(/\s+/)[0];
   cWords.push(word);
   cTurn++;cPlayer=cPlayer===1?2:1;
@@ -593,7 +662,7 @@ function showCadaverEnd(){
   saveHistory('cadaver',cTurn*5,`${cTurn} turnos · ${cWords.length} palavras`);
 }
 
-// ══ ANAGRAMA ══
+// ══ ANAGRAMA (corrigido) ══
 const anagramaAll=[
   {word:"BRASIL",hint:"País da América do Sul",category:"países"},
   {word:"ESCOLA",hint:"Lugar onde se aprende",category:"lugares"},
@@ -613,53 +682,64 @@ const anagramaAll=[
   {word:"SONHO",hint:"O que acontece enquanto dormimos",category:"conceitos"},
   {word:"CHAVE",hint:"Instrumento para abrir fechaduras",category:"objetos"},
   {word:"PRAIA",hint:"Faixa de areia à beira do mar",category:"lugares"},
-  {word:"RELÓGIO",hint:"Instrumento que mede o tempo",category:"objetos"},
+  {word:"RELOGIO",hint:"Instrumento que mede o tempo",category:"objetos"},
   {word:"CAVALO",hint:"Animal de carga e corrida",category:"animais"},
   {word:"FOGUETE",hint:"Veículo para o espaço",category:"tecnologia"},
   {word:"GELADO",hint:"Muito frio",category:"conceitos"},
   {word:"ESTRADA",hint:"Via para automóveis fora das cidades",category:"lugares"},
-  {word:"CHAPÉU",hint:"Acessório que se usa na cabeça",category:"moda"},
-  {word:"DRAGÃO",hint:"Criatura mítica que cospe fogo",category:"fantasia"},
+  {word:"CHAPEU",hint:"Acessório que se usa na cabeça",category:"moda"},
+  {word:"DRAGAO",hint:"Criatura mítica que cospe fogo",category:"fantasia"},
   {word:"ESPELHO",hint:"Superfície que reflete imagens",category:"objetos"},
   {word:"FLORESTA",hint:"Grande área coberta de árvores",category:"natureza"},
   {word:"GALINHA",hint:"Ave doméstica que bota ovos",category:"animais"},
   {word:"HOSPITAL",hint:"Local de tratamento médico",category:"lugares"},
   {word:"INVERNO",hint:"Estação mais fria do ano",category:"estações"},
-  {word:"JULGAMENTO",hint:"Processo jurídico de decisão",category:"direito"},
-  {word:"LABIRINTO",hint:"Conjunto de caminhos confusos",category:"conceitos"},
   {word:"MACACO",hint:"Primata inteligente",category:"animais"},
   {word:"NARIZ",hint:"Órgão do olfato no centro do rosto",category:"corpo"},
-  {word:"ÓCULOS",hint:"Lentes para corrigir a visão",category:"objetos"},
+  {word:"OCULOS",hint:"Lentes para corrigir a visão",category:"objetos"},
   {word:"PINGUIM",hint:"Ave que não voa e vive no frio",category:"animais"},
   {word:"QUEIJO",hint:"Alimento feito de leite coalhado",category:"comida"},
-  {word:"ROBÔ",hint:"Máquina programável",category:"tecnologia"},
+  {word:"ROBO",hint:"Máquina programável",category:"tecnologia"},
   {word:"SUBMARINO",hint:"Veículo que navega submerso",category:"transporte"},
   {word:"TELEFONE",hint:"Aparelho de comunicação por voz",category:"tecnologia"},
   {word:"UNIVERSO",hint:"Tudo que existe no espaço",category:"ciência"},
   {word:"VAMPIRO",hint:"Criatura mitológica que bebe sangue",category:"fantasia"},
-  {word:"XÍCARA",hint:"Recipiente para tomar chá ou café",category:"objetos"},
+  {word:"XICARA",hint:"Recipiente para tomar chá ou café",category:"objetos"},
   {word:"ZEBRA",hint:"Animal africano listrado em preto e branco",category:"animais"},
-  {word:"VIOLÃO",hint:"Instrumento de cordas tocado com dedos",category:"música"},
+  {word:"VIOLAO",hint:"Instrumento de cordas tocado com dedos",category:"música"},
   {word:"TECLADO",hint:"Dispositivo de entrada com teclas",category:"tecnologia"},
-  {word:"SATÉLITE",hint:"Objeto que orbita um planeta",category:"ciência"},
-  {word:"RÁDIO",hint:"Aparelho de comunicação por ondas",category:"tecnologia"},
+  {word:"SATELITE",hint:"Objeto que orbita um planeta",category:"ciência"},
+  {word:"RADIO",hint:"Aparelho de comunicação por ondas",category:"tecnologia"},
   {word:"POLVO",hint:"Molusco com oito tentáculos",category:"animais"},
-  {word:"OXIGÊNIO",hint:"Gás essencial para a respiração",category:"ciência"},
+  {word:"OXIGENIO",hint:"Gás essencial para a respiração",category:"ciência"},
 ];
 
 let anIdx=0,anScore=0,anCorrect=0,anShuffled=[],anTotal=10;
-let anCurrent=null,anSelected=[],anHintUsed=false;
+let anCurrent=null,anSelected=[],anHintUsed=false,anLetters=[];
+
 function initAnagrama(rounds){
   anIdx=0;anScore=0;anCorrect=0;anTotal=Math.min(rounds,anagramaAll.length);
   anShuffled=[...anagramaAll].sort(()=>Math.random()-.5).slice(0,anTotal);
   renderAnagrama();
 }
-function shuffle(arr){return [...arr].sort(()=>Math.random()-.5);}
+function shuffleArr(arr){
+  const a=[...arr];
+  for(let i=a.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [a[i],a[j]]=[a[j],a[i]];
+  }
+  return a;
+}
 function renderAnagrama(){
   if(anIdx>=anShuffled.length){showFinal();return;}
   anCurrent=anShuffled[anIdx];
-  anSelected=[];anHintUsed=false;
-  const letters=shuffle(anCurrent.word.split(''));
+  anSelected=[]; // array de índices de anLetters (não letras!) na ordem escolhida
+  anHintUsed=false;
+  anLetters=shuffleArr(anCurrent.word.split(''));
+  // garante que não vai sair igual à palavra original (evita anagram trivial)
+  if(anLetters.join('')===anCurrent.word && anLetters.length>1){
+    [anLetters[0],anLetters[1]]=[anLetters[1],anLetters[0]];
+  }
   document.getElementById('an-bar').style.width=(anIdx/anShuffled.length*100)+'%';
   document.getElementById('an-round').textContent=(anIdx+1)+'/'+anShuffled.length;
   document.getElementById('an-score').textContent=anScore;
@@ -667,32 +747,40 @@ function renderAnagrama(){
   document.getElementById('an-fb').textContent='';
   document.getElementById('an-next').classList.remove('show');
   document.getElementById('an-hint').textContent='Clique nas letras para formar a palavra';
-  renderAnagramTiles(letters);
+  renderAnagramTiles();
   renderAnagramSlots();
 }
-function renderAnagramTiles(letters){
-  document.getElementById('an-tiles').innerHTML=letters.map((l,i)=>
-    `<div class="letter-tile" id="tile-${i}" onclick="selectLetter(${i},'${l}')">${l}</div>`
-  ).join('');
+function renderAnagramTiles(){
+  document.getElementById('an-tiles').innerHTML=anLetters.map((l,idx)=>{
+    const used=anSelected.includes(idx);
+    return `<div class="letter-tile${used?' disabled':''}" data-idx="${idx}" onclick="selectLetter(${idx})">${l}</div>`;
+  }).join('');
 }
 function renderAnagramSlots(){
   const len=anCurrent.word.length;
-  document.getElementById('an-slots').innerHTML=Array(len).fill(0).map((_,i)=>
-    `<div class="answer-slot${anSelected[i]?' filled':''}" id="slot-${i}">${anSelected[i]||''}</div>`
-  ).join('');
+  document.getElementById('an-slots').innerHTML=Array(len).fill(0).map((_,slotPos)=>{
+    const letterIdx=anSelected[slotPos];
+    const hasLetter=letterIdx!==undefined;
+    const letter=hasLetter?anLetters[letterIdx]:'';
+    return `<div class="answer-slot${hasLetter?' filled':''}" onclick="${hasLetter?`removeLetter(${slotPos})`:''}">${letter}</div>`;
+  }).join('');
 }
-function selectLetter(idx,letter){
-  const tile=document.getElementById('tile-'+idx);
-  if(tile.classList.contains('disabled'))return;
+function selectLetter(idx){
+  if(anSelected.includes(idx))return;
   if(anSelected.length>=anCurrent.word.length)return;
-  tile.classList.add('disabled');
-  anSelected.push({letter,tileIdx:idx});
+  anSelected.push(idx);
+  renderAnagramTiles();
   renderAnagramSlots();
   if(anSelected.length===anCurrent.word.length)checkAnagram();
 }
+function removeLetter(slotPos){
+  anSelected.splice(slotPos,1);
+  renderAnagramTiles();
+  renderAnagramSlots();
+}
 function anagramClear(){
-  document.querySelectorAll('.letter-tile').forEach(t=>t.classList.remove('disabled'));
   anSelected=[];
+  renderAnagramTiles();
   renderAnagramSlots();
 }
 function anagramHint(){
@@ -701,11 +789,13 @@ function anagramHint(){
   document.getElementById('an-hint').textContent='💡 Dica: '+anCurrent.hint;
 }
 function checkAnagram(){
-  const formed=anSelected.map(s=>s.letter).join('');
+  const formed=anSelected.map(idx=>anLetters[idx]).join('');
   const fb=document.getElementById('an-fb');
   if(formed===anCurrent.word){
-    anScore+=anHintUsed?5:10;anCorrect++;
-    fb.textContent='✓ Correto'+(anHintUsed?' (dica usada, +5 pts)':'!');;fb.style.color='var(--green)';
+    const pts=anHintUsed?5:10;
+    anScore+=pts;anCorrect++;
+    fb.textContent='✓ Correto! +'+pts+' pts'+(anHintUsed?' (dica usada)':'');
+    fb.style.color='var(--green)';
     document.querySelectorAll('.answer-slot').forEach(s=>s.style.borderColor='var(--green)');
   } else {
     fb.textContent=`✗ Era "${anCurrent.word}"`;fb.style.color='var(--red)';
@@ -716,12 +806,157 @@ function checkAnagram(){
 }
 function anagramNext(){anIdx++;renderAnagrama();}
 
+// ══ TITERMO ══
+const titermoWords=[
+  "GATOS","PORTA","FESTA","LIVRO","TERRA","FORTE","VERDE","PRAIA","NOITE","CARRO",
+  "PONTE","DOCES","MUSAS","CAMPO","NAVIO","SORTE","FLUXO","MORNO","RAPIDO","BANCO",
+  "TRENO","PEDRA","FOLHA","BRISA","CORDA","FRIOS","SALAS","TIGRE","VIDRO","ALEGRE",
+  "PRATO","CALDO","DENTE","LENTO","BARCO","CHUVA","FRUTA","NUVEM","SUAVE","TUBOS"
+].filter(w=>w.length===5);
+
+let tIdx=0,tScore=0,tWord='',tGuesses=[],tCurrentGuess='',tMaxAttempts=6,tShuffled=[],tTotal=10,tGameOver=false;
+const tKeyState={};
+
+function initTitermo(rounds){
+  tIdx=0;tScore=0;tTotal=Math.min(rounds,titermoWords.length);
+  tShuffled=[...titermoWords].sort(()=>Math.random()-.5).slice(0,tTotal);
+  renderTitermoRound();
+}
+function renderTitermoRound(){
+  if(tIdx>=tShuffled.length){showFinal();return;}
+  tWord=tShuffled[tIdx];
+  tGuesses=[];tCurrentGuess='';tGameOver=false;
+  Object.keys(tKeyState).forEach(k=>delete tKeyState[k]);
+  document.getElementById('t-round').textContent=(tIdx+1)+'/'+tShuffled.length;
+  document.getElementById('t-score').textContent=tScore;
+  document.getElementById('t-msg').textContent='';
+  document.getElementById('t-next').classList.remove('show');
+  renderTitermoGrid();
+  renderTitermoKeyboard();
+  document.addEventListener('keydown',titermoKeyHandler);
+}
+function evalGuess(guess,answer){
+  const result=Array(guess.length).fill('absent');
+  const answerArr=answer.split('');
+  const used=Array(answer.length).fill(false);
+  for(let i=0;i<guess.length;i++){
+    if(guess[i]===answerArr[i]){result[i]='correct';used[i]=true;}
+  }
+  for(let i=0;i<guess.length;i++){
+    if(result[i]==='correct')continue;
+    for(let j=0;j<answerArr.length;j++){
+      if(!used[j] && guess[i]===answerArr[j]){result[i]='present';used[j]=true;break;}
+    }
+  }
+  return result;
+}
+function renderTitermoGrid(){
+  const len=tWord.length;
+  let html='';
+  for(let row=0;row<tMaxAttempts;row++){
+    html+='<div class="titermo-row">';
+    let rowLetters=[],rowResult=null;
+    if(row<tGuesses.length){
+      rowLetters=tGuesses[row].split('');
+      rowResult=evalGuess(tGuesses[row],tWord);
+    } else if(row===tGuesses.length){
+      rowLetters=tCurrentGuess.split('');
+    }
+    for(let col=0;col<len;col++){
+      const letter=rowLetters[col]||'';
+      let cls='titermo-cell';
+      if(rowResult){cls+=' '+rowResult[col];}
+      else if(letter){cls+=' filled';}
+      html+=`<div class="${cls}">${letter}</div>`;
+    }
+    html+='</div>';
+  }
+  document.getElementById('t-grid').innerHTML=html;
+}
+function renderTitermoKeyboard(){
+  const rows=[['Q','W','E','R','T','Y','U','I','O','P'],['A','S','D','F','G','H','J','K','L'],['Z','X','C','V','B','N','M']];
+  let html='';
+  rows.forEach((row,i)=>{
+    html+='<div class="titermo-krow">';
+    if(i===2)html+=`<button class="tkey tkey-wide" onclick="titermoSubmit()">OK</button>`;
+    row.forEach(k=>{
+      const st=tKeyState[k];
+      html+=`<button class="tkey${st?' '+st:''}" onclick="titermoType('${k}')">${k}</button>`;
+    });
+    if(i===2)html+=`<button class="tkey tkey-wide" onclick="titermoBackspace()">⌫</button>`;
+    html+='</div>';
+  });
+  document.getElementById('t-keyboard').innerHTML=html;
+}
+function titermoType(letter){
+  if(tGameOver)return;
+  if(tCurrentGuess.length>=tWord.length)return;
+  tCurrentGuess+=letter;
+  renderTitermoGrid();
+}
+function titermoBackspace(){
+  if(tGameOver)return;
+  tCurrentGuess=tCurrentGuess.slice(0,-1);
+  renderTitermoGrid();
+}
+function titermoSubmit(){
+  if(tGameOver)return;
+  if(tCurrentGuess.length!==tWord.length){
+    document.getElementById('t-msg').textContent='Complete a palavra antes de confirmar.';
+    document.getElementById('t-msg').style.color='var(--text2)';
+    return;
+  }
+  const result=evalGuess(tCurrentGuess,tWord);
+  tCurrentGuess.split('').forEach((l,i)=>{
+    const cur=tKeyState[l];
+    const newSt=result[i];
+    if(cur==='correct')return;
+    if(newSt==='correct'||(newSt==='present'&&cur!=='present')||(!cur)) tKeyState[l]=newSt;
+  });
+  tGuesses.push(tCurrentGuess);
+  const won=tCurrentGuess===tWord;
+  tCurrentGuess='';
+  renderTitermoGrid();
+  renderTitermoKeyboard();
+  if(won){
+    const pts=Math.max(10,(tMaxAttempts-tGuesses.length+1)*15);
+    tScore+=pts;
+    tGameOver=true;
+    document.getElementById('t-msg').textContent=`✓ Acertou em ${tGuesses.length} tentativa(s)! +${pts} pts`;
+    document.getElementById('t-msg').style.color='var(--green)';
+    document.getElementById('t-score').textContent=tScore;
+    document.getElementById('t-next').classList.add('show');
+    document.removeEventListener('keydown',titermoKeyHandler);
+  } else if(tGuesses.length>=tMaxAttempts){
+    tGameOver=true;
+    document.getElementById('t-msg').textContent=`✗ Acabaram as tentativas! Era "${tWord}"`;
+    document.getElementById('t-msg').style.color='var(--red)';
+    document.getElementById('t-next').classList.add('show');
+    document.removeEventListener('keydown',titermoKeyHandler);
+  } else {
+    document.getElementById('t-msg').textContent='';
+  }
+}
+function titermoKeyHandler(e){
+  if(tGameOver)return;
+  if(e.key==='Enter'){titermoSubmit();return;}
+  if(e.key==='Backspace'){titermoBackspace();return;}
+  const k=e.key.toUpperCase();
+  if(/^[A-ZÀ-Ú]$/.test(k))titermoType(k);
+}
+function titermoNext(){
+  document.removeEventListener('keydown',titermoKeyHandler);
+  tIdx++;
+  renderTitermoRound();
+}
+
 // ══ FINAL ══
 function showFinal(){
   let score=0,correct=0,total=0;
   if(currentGame==='emoji'){score=eScore;correct=eCorrect;total=eShuffled.length;saveHistory('emoji',score,`${correct}/${total} acertos`);}
   else if(currentGame==='impostor'){score=iScore;correct=iCorrect;total=iShuffled.length;saveHistory('impostor',score,`${correct}/${total} acertos`);}
   else if(currentGame==='anagrama'){score=anScore;correct=anCorrect;total=anShuffled.length;saveHistory('anagrama',score,`${correct}/${total} acertos`);}
+  else if(currentGame==='titermo'){score=tScore;total=tShuffled.length;correct=tShuffled.length;saveHistory('titermo',score,`${tShuffled.length} palavras jogadas`);}
   const pct=total>0?Math.round(correct/total*100):0;
   let emoji='🤔',title='Não foi dessa vez!',msg='Tente de novo para melhorar!';
   if(pct>=80){emoji='🏆';title='Excelente!';msg='Você arrasou! Pontuação impressionante.';}
