@@ -23,13 +23,23 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:0 2rem
 .menu-hero h1{font-size:clamp(2rem,5vw,3rem);font-weight:700;letter-spacing:-.5px;margin-bottom:.75rem;}
 .menu-hero h1 span{color:var(--accent-light);}
 .menu-hero p{font-size:16px;color:var(--text2);}
-.game-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;max-width:960px;margin:0 auto;padding:0 1.5rem 4rem;}
+.menu-wrap{max-width:960px;margin:0 auto;padding:0 1.5rem 4rem;}
+.category-block{margin-bottom:2.5rem;}
+.category-title{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--text3);margin-bottom:1rem;padding-left:2px;display:flex;align-items:center;gap:8px;}
+.category-title::after{content:'';flex:1;height:1px;background:var(--border);}
+.game-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;}
 .game-card{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:1.75rem;cursor:pointer;transition:border-color .2s,transform .15s,box-shadow .2s;box-shadow:var(--card-shadow);}
 .game-card:hover{border-color:var(--accent);transform:translateY(-3px);box-shadow:0 8px 24px rgba(124,111,247,.15);}
 .game-card-icon{font-size:40px;margin-bottom:1rem;display:block;}
 .game-card h2{font-size:17px;font-weight:600;margin-bottom:.4rem;}
 .game-card p{font-size:14px;color:var(--text2);line-height:1.6;}
 .game-card .badge{display:inline-block;margin-top:1rem;font-size:12px;padding:3px 10px;border-radius:20px;}
+.topic-section{max-width:960px;margin:0 auto;padding:0 1.5rem;}
+.topic-header{display:flex;align-items:center;gap:14px;margin:2.5rem 0 1.25rem;}
+.topic-icon{font-size:28px;}
+.topic-title{font-size:18px;font-weight:700;color:var(--text);}
+.topic-sub{font-size:13px;color:var(--text2);}
+.topic-section:last-child{padding-bottom:3rem;}
 .badge-purple{background:rgba(124,111,247,.15);color:var(--accent-light);}
 .badge-green{background:rgba(76,175,125,.15);color:var(--green);}
 .badge-amber{background:var(--amber-bg);color:var(--amber);}
@@ -123,6 +133,20 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:0 2rem
 .tkey.absent{background:var(--bg4);color:var(--text3);opacity:.5;}
 .tkey-wide{min-width:52px;font-size:11px;}
 .titermo-msg{text-align:center;font-size:14px;min-height:22px;margin:.75rem 0;color:var(--text2);}
+.titermo-grid.shake{animation:tshake .3s;}
+@keyframes tshake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+
+/* TICOBRA */
+.cobra-wrap{position:relative;width:100%;aspect-ratio:1/1;max-width:400px;margin:0 auto 1.25rem;border-radius:16px;overflow:hidden;border:1px solid var(--border);box-shadow:var(--card-shadow);}
+#cb-canvas{width:100%;height:100%;display:block;background:var(--bg2);}
+.cobra-overlay{position:absolute;inset:0;background:rgba(14,14,17,.82);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:2rem;gap:.75rem;}
+:root[data-theme="light"] .cobra-overlay{background:rgba(244,244,248,.92);}
+.cobra-overlay-title{font-size:24px;font-weight:700;color:var(--text);}
+.cobra-overlay-sub{font-size:14px;color:var(--text2);max-width:260px;line-height:1.5;margin-bottom:.5rem;}
+.cobra-controls{display:none;grid-template-columns:repeat(3,56px);grid-template-rows:repeat(3,56px);gap:6px;justify-content:center;margin-top:.5rem;}
+.cobra-controls.show{display:grid;}
+.cobra-btn{background:var(--bg3);border:1px solid var(--border2);border-radius:12px;font-size:20px;color:var(--text);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .1s;}
+.cobra-btn:active{background:var(--bg4);}
 
 /* HISTÓRICO */
 .history-screen{max-width:700px;margin:0 auto;padding:2rem 1.5rem 4rem;}
@@ -164,38 +188,78 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:0 2rem
 <div class="screen active" id="screen-menu">
   <div class="menu-hero">
     <h1>Escolha seu <span>jogo</span></h1>
-    <p>5 modos de jogo — sozinho ou com amigos</p>
+    <p>6 modos de jogo — sozinho ou com amigos</p>
   </div>
-  <div class="game-grid">
-    <div class="game-card" onclick="goSetup('emoji')">
-      <span class="game-card-icon">🎯</span>
-      <h2>Adivinhe pelo emoji</h2>
-      <p>Descubra a palavra ou frase escondida a partir de uma sequência de emojis. Quanto mais difícil o nível, menos óbvias são as pistas.</p>
-      <span class="badge badge-purple">solo · até 50 rodadas</span>
+
+  <div class="topic-section">
+    <div class="topic-header">
+      <span class="topic-icon">🔤</span>
+      <div><div class="topic-title">Palavras</div><div class="topic-sub">teste seu vocabulário e raciocínio verbal</div></div>
     </div>
-    <div class="game-card" onclick="goSetup('impostor')">
-      <span class="game-card-icon">🕵️</span>
-      <h2>Caça ao impostor</h2>
-      <p>Quatro palavras aparecem na tela. Três pertencem ao mesmo grupo secreto — uma é o impostor. Descubra qual não pertence.</p>
-      <span class="badge badge-green">solo · até 50 rodadas</span>
+    <div class="game-grid">
+      <div class="game-card" onclick="goSetup('emoji')">
+        <span class="game-card-icon">🎯</span>
+        <h2>TiEmoji</h2>
+        <p>Descubra a palavra ou frase escondida a partir de uma sequência de emojis. A maioria das perguntas é difícil — prepare-se para pensar fora da caixa.</p>
+        <span class="badge badge-purple">solo · até 50 rodadas</span>
+      </div>
+      <div class="game-card" onclick="goSetup('anagrama')">
+        <span class="game-card-icon">🔤</span>
+        <h2>Anagrama</h2>
+        <p>As letras de uma palavra estão embaralhadas. Reorganize-as na ordem certa. Palavras mais raras e longas agora fazem parte do desafio.</p>
+        <span class="badge badge-purple">solo · até 50 rodadas</span>
+      </div>
+      <div class="game-card" onclick="goSetup('titermo')">
+        <span class="game-card-icon">🟩</span>
+        <h2>Titermo</h2>
+        <p>Inspirado no clássico jogo de adivinhação de palavras. Descubra a palavra secreta em até 6 tentativas — só são aceitas palavras reais.</p>
+        <span class="badge badge-yellow">solo · até 50 palavras</span>
+      </div>
     </div>
-    <div class="game-card" onclick="goSetup('cadaver')">
-      <span class="game-card-icon">✍️</span>
-      <h2>Cadáver esquisito</h2>
-      <p>Construa uma história absurda palavra por palavra. Cada jogador só vê a última palavra digitada — o resultado é sempre imprevisível.</p>
-      <span class="badge badge-amber">multiplayer · até 50 turnos</span>
+  </div>
+
+  <div class="topic-section">
+    <div class="topic-header">
+      <span class="topic-icon">🧠</span>
+      <div><div class="topic-title">Lógica e dedução</div><div class="topic-sub">raciocínio, atenção e percepção</div></div>
     </div>
-    <div class="game-card" onclick="goSetup('anagrama')">
-      <span class="game-card-icon">🔤</span>
-      <h2>Anagrama</h2>
-      <p>As letras de uma palavra estão embaralhadas. Reorganize-as na ordem certa. Use a dica se precisar!</p>
-      <span class="badge badge-purple">solo · até 50 rodadas</span>
+    <div class="game-grid">
+      <div class="game-card" onclick="goSetup('impostor')">
+        <span class="game-card-icon">🕵️</span>
+        <h2>Caça ao impostor</h2>
+        <p>Quatro palavras aparecem na tela. Três pertencem ao mesmo grupo secreto — uma é o impostor, e os grupos agora exigem conhecimento mais específico.</p>
+        <span class="badge badge-green">solo · até 50 rodadas</span>
+      </div>
     </div>
-    <div class="game-card" onclick="goSetup('titermo')">
-      <span class="game-card-icon">🟩</span>
-      <h2>Titermo</h2>
-      <p>Inspirado no clássico jogo de adivinhação de palavras. Descubra a palavra secreta em até 6 tentativas usando as cores como pista.</p>
-      <span class="badge badge-yellow">solo · até 50 palavras</span>
+  </div>
+
+  <div class="topic-section">
+    <div class="topic-header">
+      <span class="topic-icon">🎉</span>
+      <div><div class="topic-title">Multiplayer e criatividade</div><div class="topic-sub">jogue com amigos no mesmo aparelho</div></div>
+    </div>
+    <div class="game-grid">
+      <div class="game-card" onclick="goSetup('cadaver')">
+        <span class="game-card-icon">✍️</span>
+        <h2>Cadáver esquisito</h2>
+        <p>Construa uma história absurda palavra por palavra. Cada jogador só vê a última palavra digitada — o resultado é sempre imprevisível.</p>
+        <span class="badge badge-amber">multiplayer · até 50 turnos</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="topic-section">
+    <div class="topic-header">
+      <span class="topic-icon">🕹️</span>
+      <div><div class="topic-title">Arcade</div><div class="topic-sub">reflexo e habilidade, sem cronômetro de pergunta</div></div>
+    </div>
+    <div class="game-grid">
+      <div class="game-card" onclick="goSetup('cobra')">
+        <span class="game-card-icon">🐍</span>
+        <h2>TiCobra</h2>
+        <p>O clássico jogo da cobrinha. Coma as maçãs para crescer, desvie das paredes e do seu próprio corpo. Quanto maior a cobra, mais difícil fica.</p>
+        <span class="badge badge-green">solo · arcade</span>
+      </div>
     </div>
   </div>
 </div>
@@ -306,6 +370,31 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:0 2rem
   </div>
 </div>
 
+<!-- ══ TICOBRA ══ -->
+<div class="screen" id="screen-cobra">
+  <div class="game-screen" style="max-width:480px">
+    <button class="back-btn" onclick="goMenu()">← voltar ao menu</button>
+    <div class="hud">
+      <div class="hud-item">pontuação <span class="hud-val" id="cb-score">0</span></div>
+      <div class="hud-item" style="text-align:right">recorde <span class="hud-val" id="cb-best">0</span></div>
+    </div>
+    <div class="cobra-wrap">
+      <canvas id="cb-canvas" width="400" height="400"></canvas>
+      <div class="cobra-overlay" id="cb-overlay">
+        <div class="cobra-overlay-title" id="cb-overlay-title">TiCobra</div>
+        <div class="cobra-overlay-sub" id="cb-overlay-sub">Use as setas ou WASD para mover. Toque para começar.</div>
+        <button class="start-game-btn" style="width:auto;padding:.75rem 2rem" onclick="cobraStart()">jogar →</button>
+      </div>
+    </div>
+    <div class="cobra-controls" id="cb-controls">
+      <button class="cobra-btn" style="grid-column:2" onclick="cobraSetDir(0,-1)">▲</button>
+      <button class="cobra-btn" style="grid-column:1;grid-row:2" onclick="cobraSetDir(-1,0)">◀</button>
+      <button class="cobra-btn" style="grid-column:3;grid-row:2" onclick="cobraSetDir(1,0)">▶</button>
+      <button class="cobra-btn" style="grid-column:2;grid-row:3" onclick="cobraSetDir(0,1)">▼</button>
+    </div>
+  </div>
+</div>
+
 <!-- ══ HISTÓRICO ══ -->
 <div class="screen" id="screen-historico">
   <div class="history-screen">
@@ -348,13 +437,15 @@ function showScreen(id){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById('screen-'+id).classList.add('active');
   if(id==='historico')renderHistory();
+  if(id!=='cobra'){ document.removeEventListener('keydown',cobraKeyHandler); if(typeof cbLoop!=='undefined' && cbLoop) clearInterval(cbLoop); }
+  if(id!=='titermo'){ document.removeEventListener('keydown',titermoKeyHandler); }
 }
 function goMenu(){showScreen('menu');}
 
 // ── HISTORY ──
 let gameHistory=JSON.parse(localStorage.getItem('titigame_history')||'[]');
-const gameNames={emoji:'Emoji',impostor:'Impostor',cadaver:'Cadáver',anagrama:'Anagrama',titermo:'Titermo'};
-const gameIcons={emoji:'🎯',impostor:'🕵️',cadaver:'✍️',anagrama:'🔤',titermo:'🟩'};
+const gameNames={emoji:'TiEmoji',impostor:'Impostor',cadaver:'Cadáver',anagrama:'Anagrama',titermo:'Titermo',cobra:'TiCobra'};
+const gameIcons={emoji:'🎯',impostor:'🕵️',cadaver:'✍️',anagrama:'🔤',titermo:'🟩',cobra:'🐍'};
 function saveHistory(game,score,detail){
   const entry={game,score,detail,date:new Date().toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'})};
   gameHistory.unshift(entry);
@@ -391,6 +482,7 @@ const setupInfo={
 const roundOptions=[5,10,15,20,25,30,40,50];
 
 function goSetup(game){
+  if(game==='cobra'){startGame('cobra',0);return;}
   pendingGame=game; selectedRounds=10;
   document.getElementById('setup-title').textContent=setupInfo[game].title;
   document.getElementById('setup-sub').textContent=setupInfo[game].sub;
@@ -414,6 +506,7 @@ function startGame(game,rounds){
   else if(game==='cadaver')initCadaver(rounds);
   else if(game==='anagrama')initAnagrama(rounds);
   else if(game==='titermo')initTitermo(rounds);
+  else if(game==='cobra')initCobra();
   showScreen(game);
 }
 
@@ -809,10 +902,33 @@ function anagramNext(){anIdx++;renderAnagrama();}
 // ══ TITERMO ══
 const titermoWords=[
   "GATOS","PORTA","FESTA","LIVRO","TERRA","FORTE","VERDE","PRAIA","NOITE","CARRO",
-  "PONTE","DOCES","MUSAS","CAMPO","NAVIO","SORTE","FLUXO","MORNO","RAPIDO","BANCO",
-  "TRENO","PEDRA","FOLHA","BRISA","CORDA","FRIOS","SALAS","TIGRE","VIDRO","ALEGRE",
-  "PRATO","CALDO","DENTE","LENTO","BARCO","CHUVA","FRUTA","NUVEM","SUAVE","TUBOS"
-].filter(w=>w.length===5);
+  "PONTE","DOCES","MUSAS","CAMPO","NAVIO","SORTE","FLUXO","MORNO","BANCO",
+  "PEDRA","FOLHA","BRISA","CORDA","FRIOS","SALAS","TIGRE","VIDRO",
+  "PRATO","CALDO","DENTE","LENTO","BARCO","CHUVA","FRUTA","NUVEM","SUAVE","TUBOS",
+  "MARES","FOGOS","RIGOR","SONHO","LOBOS","BICHO","TROPA","CAIXA","FILME","JOGOS",
+  "VENTO","MUNDO","TEMPO","FACAS","PEIXE","REINO"
+];
+
+// Dicionário de validação: todas as palavras válidas de 5 letras aceitas como tentativa.
+// Inclui as palavras-resposta + um vocabulário adicional comum em português.
+const titermoDictionary=new Set([
+  ...titermoWords,
+  "AMIGO","CASAS","RODAS","FOLGA","TRAGO","CAUSA","CABOS","FALAS","GANHO","JUROS",
+  "LAGOS","MAGRO","NADAR","PAGOS","RATOS","SAPOS","TANTO","VAGAS",
+  "ZEBRA","ABRIR","BEBER","CORRE","DORME","ENTRA","FECHA","GASTA","HOTEL",
+  "IGUAL","JOVEM","LIMAO","MOLHO","NORTE","OESTE","PRECO","QUEDA","RUMOR","SALTO",
+  "TROCA","UNIAO","VALOR","BOLSA","CANTO","DOBRA","ECOAR","FATOR","GRAOS","HORAS",
+  "IDEIA","JUNTO","LARGO","MOEDA","NEVOA","ORDEM","PASSO",
+  "SAUDE","TEXTO","USINA","VOLTA","ALMAS","BRAVO","CEDRO",
+  "ELITE","FIBRA","GIRAR","HONRA","ILHAS","JANTA","LOUCO","MACIO","NOBRE","OUSAR",
+  "PONTO","RAPAZ","SECAS","TOQUE","VIAJA","ABALO","BARRO","CHEFE",
+  "DEDOS","FRASE","GENTE","IRMAO","LAVAR",
+  "MEDIR","NINHO","OPCAO","PALCO","QUASE","RUGAS","SETOR","TARDE",
+]);
+function isValidTitermoWord(w){
+  return titermoDictionary.has(w);
+}
+
 
 let tIdx=0,tScore=0,tWord='',tGuesses=[],tCurrentGuess='',tMaxAttempts=6,tShuffled=[],tTotal=10,tGameOver=false;
 const tKeyState={};
@@ -906,6 +1022,14 @@ function titermoSubmit(){
     document.getElementById('t-msg').style.color='var(--text2)';
     return;
   }
+  if(!isValidTitermoWord(tCurrentGuess)){
+    document.getElementById('t-msg').textContent=`"${tCurrentGuess}" não é uma palavra válida.`;
+    document.getElementById('t-msg').style.color='var(--red)';
+    const gridEl=document.getElementById('t-grid');
+    gridEl.classList.add('shake');
+    setTimeout(()=>gridEl.classList.remove('shake'),300);
+    return;
+  }
   const result=evalGuess(tCurrentGuess,tWord);
   tCurrentGuess.split('').forEach((l,i)=>{
     const cur=tKeyState[l];
@@ -950,7 +1074,142 @@ function titermoNext(){
   renderTitermoRound();
 }
 
-// ══ FINAL ══
+// ══ TICOBRA ══
+let cbCanvas,cbCtx,cbGridSize=20,cbCellSize=20,cbSnake,cbDir,cbNextDir,cbFood,cbScore,cbBest,cbLoop,cbSpeed,cbRunning;
+
+function initCobra(){
+  cbCanvas=document.getElementById('cb-canvas');
+  cbCtx=cbCanvas.getContext('2d');
+  cbBest=parseInt(localStorage.getItem('titigame_cobra_best')||'0',10);
+  document.getElementById('cb-best').textContent=cbBest;
+  document.getElementById('cb-score').textContent='0';
+  document.getElementById('cb-overlay-title').textContent='TiCobra';
+  document.getElementById('cb-overlay-sub').textContent='Use as setas, WASD ou os botões abaixo para mover.';
+  document.getElementById('cb-overlay').style.display='flex';
+  document.getElementById('cb-controls').classList.remove('show');
+  cbRunning=false;
+  drawCobraBoard();
+  document.addEventListener('keydown',cobraKeyHandler);
+}
+function resizeCobraCanvas(){
+  const wrap=cbCanvas.parentElement;
+  const size=Math.min(wrap.clientWidth,400);
+  cbCanvas.width=size;
+  cbCanvas.height=size;
+  cbCellSize=size/cbGridSize;
+}
+function drawCobraBoard(){
+  resizeCobraCanvas();
+  const isDark=document.documentElement.dataset.theme==='dark';
+  cbCtx.fillStyle=isDark?'#1e1e24':'#eaeaf0';
+  cbCtx.fillRect(0,0,cbCanvas.width,cbCanvas.height);
+}
+function cobraStart(){
+  document.getElementById('cb-overlay').style.display='none';
+  document.getElementById('cb-controls').classList.add('show');
+  cbSnake=[{x:10,y:10},{x:9,y:10},{x:8,y:10}];
+  cbDir={x:1,y:0};
+  cbNextDir={x:1,y:0};
+  cbScore=0;
+  cbSpeed=140;
+  cbRunning=true;
+  document.getElementById('cb-score').textContent='0';
+  placeCobraFood();
+  if(cbLoop)clearInterval(cbLoop);
+  cbLoop=setInterval(cobraTick,cbSpeed);
+}
+function placeCobraFood(){
+  let pos;
+  do{
+    pos={x:Math.floor(Math.random()*cbGridSize),y:Math.floor(Math.random()*cbGridSize)};
+  } while(cbSnake.some(s=>s.x===pos.x&&s.y===pos.y));
+  cbFood=pos;
+}
+function cobraSetDir(x,y){
+  if(!cbRunning)return;
+  // impede inverter direção diretamente (não pode virar 180°)
+  if(cbDir.x===-x && cbDir.y===-y)return;
+  if(cbDir.x===x && cbDir.y===y)return;
+  cbNextDir={x,y};
+}
+function cobraKeyHandler(e){
+  const map={
+    'ArrowUp':[0,-1],'ArrowDown':[0,1],'ArrowLeft':[-1,0],'ArrowRight':[1,0],
+    'w':[0,-1],'s':[0,1],'a':[-1,0],'d':[1,0],
+    'W':[0,-1],'S':[0,1],'A':[-1,0],'D':[1,0],
+  };
+  if(map[e.key]){
+    e.preventDefault();
+    cobraSetDir(map[e.key][0],map[e.key][1]);
+  }
+}
+function cobraTick(){
+  cbDir=cbNextDir;
+  const head={x:cbSnake[0].x+cbDir.x,y:cbSnake[0].y+cbDir.y};
+  // colisão com parede
+  if(head.x<0||head.x>=cbGridSize||head.y<0||head.y>=cbGridSize){
+    cobraGameOver();
+    return;
+  }
+  // colisão com o próprio corpo
+  if(cbSnake.some(s=>s.x===head.x&&s.y===head.y)){
+    cobraGameOver();
+    return;
+  }
+  cbSnake.unshift(head);
+  if(head.x===cbFood.x&&head.y===cbFood.y){
+    cbScore+=10;
+    document.getElementById('cb-score').textContent=cbScore;
+    placeCobraFood();
+    // acelera levemente a cada comida, até um limite
+    if(cbSpeed>60){
+      cbSpeed-=3;
+      clearInterval(cbLoop);
+      cbLoop=setInterval(cobraTick,cbSpeed);
+    }
+  } else {
+    cbSnake.pop();
+  }
+  renderCobra();
+}
+function renderCobra(){
+  drawCobraBoard();
+  const isDark=document.documentElement.dataset.theme==='dark';
+  // comida
+  cbCtx.fillStyle='#e05c5c';
+  cbCtx.beginPath();
+  cbCtx.arc((cbFood.x+0.5)*cbCellSize,(cbFood.y+0.5)*cbCellSize,cbCellSize*0.38,0,Math.PI*2);
+  cbCtx.fill();
+  // cobra
+  cbSnake.forEach((seg,i)=>{
+    cbCtx.fillStyle=i===0?'#7c6ff7':(isDark?'#a99af9':'#5b52e8');
+    const pad=1.5;
+    cbCtx.beginPath();
+    if(cbCtx.roundRect){
+      cbCtx.roundRect(seg.x*cbCellSize+pad,seg.y*cbCellSize+pad,cbCellSize-pad*2,cbCellSize-pad*2,4);
+    } else {
+      cbCtx.rect(seg.x*cbCellSize+pad,seg.y*cbCellSize+pad,cbCellSize-pad*2,cbCellSize-pad*2);
+    }
+    cbCtx.fill();
+  });
+}
+function cobraGameOver(){
+  cbRunning=false;
+  clearInterval(cbLoop);
+  if(cbScore>cbBest){
+    cbBest=cbScore;
+    localStorage.setItem('titigame_cobra_best',cbBest);
+    document.getElementById('cb-best').textContent=cbBest;
+  }
+  saveHistory('cobra',cbScore,`recorde: ${cbBest} pts`);
+  document.getElementById('cb-overlay-title').textContent='Fim de jogo!';
+  document.getElementById('cb-overlay-sub').textContent=`Você fez ${cbScore} pontos. ${cbScore>=cbBest&&cbScore>0?'Novo recorde! 🏆':'Tente superar seu recorde de '+cbBest+' pontos.'}`;
+  document.getElementById('cb-overlay').style.display='flex';
+  document.getElementById('cb-controls').classList.remove('show');
+}
+window.addEventListener('resize',()=>{ if(document.getElementById('screen-cobra').classList.contains('active') && cbCanvas){ drawCobraBoard(); if(cbRunning)renderCobra(); } });
+
+
 function showFinal(){
   let score=0,correct=0,total=0;
   if(currentGame==='emoji'){score=eScore;correct=eCorrect;total=eShuffled.length;saveHistory('emoji',score,`${correct}/${total} acertos`);}
